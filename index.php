@@ -1,6 +1,6 @@
 <?php
 
-include_once 'app/env_loader.php';
-include_once 'app/server.php';
+include_once 'public/env_loader.php';
+include_once 'public/server.php';
 
 \Nifty\Site::start();

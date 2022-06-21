@@ -11,7 +11,7 @@ class Controller
      */
     public static function view(object $data = null)
     {
-        include __DIR__.'/../Views/'.self::path().'/'.self::file();
+        include __DIR__.'/../../../resources/views/'.strtolower(self::path()).'/'.self::file();
     }
 
     private static function path() : string

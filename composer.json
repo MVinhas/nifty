@@ -8,7 +8,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Nifty\\" : "app/Nifty"
+            "Nifty\\" : "src/Nifty"
         }
     }
 }

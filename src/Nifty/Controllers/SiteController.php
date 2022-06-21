@@ -25,6 +25,6 @@ class SiteController extends Controller
 
     public static function index()
     {
-        return (new \Nifty\Controllers\ResumeController)->index();
+        return (new \Nifty\Controllers\HomeController)->index();
     }
 }

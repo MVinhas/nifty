@@ -24,11 +24,7 @@ class Db
                 ]
             );
         } catch (PDOException $e) {
-            if (getenv('HOST')) {
-                throw SiteException::HostNotFound();
-            } else {
-                throw DatabaseException::cannotConnect($e);
-            }
+            throw DatabaseException::cannotConnect($e);
         }
     }
 
