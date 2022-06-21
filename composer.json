@@ -1,0 +1,14 @@
+{
+    "name": "mvinhas/nifty",
+    "authors": [
+        {
+            "name": "Micael Vinhas",
+            "email": "dev.mvinhas@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Nifty\\" : "app/Nifty"
+        }
+    }
+}
