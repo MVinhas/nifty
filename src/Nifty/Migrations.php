@@ -8,6 +8,7 @@ use Exception;
 class Migrations
 {
     private static $tables = [
+        'menu',
         'user_roles',
         'users',
         'posts',
@@ -24,14 +25,23 @@ class Migrations
         }
 
         foreach ($args ?? [] as $arg) {
-            try {
-                self::{$arg}();
-            } catch (Exception $e) {
-                throw SiteException::MigrationArgNotFound();
-            }
+            self::{$arg}();
         }
     }
     
+    private static function menu()
+    {
+        $fields = [
+            '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`name` VARCHAR(60) NOT NULL',
+            '`admin` INT(1) NOT NULL DEFAULT 0',
+            '`creator` INT(1) NOT NULL DEFAULT 0',
+            '`logged_in` INT(1) NOT NULL DEFAULT 0',
+            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
+        ];
+        Db::create(__FUNCTION__, $fields);
+    }
+
     private static function user_roles()
     {
         $fields = [
@@ -51,7 +61,7 @@ class Migrations
             '`email` VARCHAR(100) NOT NULL UNIQUE KEY',
             '`username` VARCHAR(30) NOT NULL',
             '`password` VARCHAR(255) NOT NULL',
-            '`role` INT(1) NOT NULL DEFAULT 3',
+            '`role_id` INT(1) NOT NULL DEFAULT 3',
             '`registered_at` TIMESTAMP',
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
             '`status` TINYINT(1) NOT NULL DEFAULT 1'
@@ -63,9 +73,9 @@ class Migrations
     {
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
-            '`category` INT(11) NOT NULL',
+            '`category_id` INT(11) NOT NULL',
+            '`author_id` INT(11) NOT NULL',
             '`title` VARCHAR(255) NOT NULL',
-            '`author` INT(11) NOT NULL',
             '`date` DATETIME',
             '`featured_image` VARCHAR(255)',
             '`excerpt` TEXT',
@@ -90,10 +100,10 @@ class Migrations
     {
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`title` VARCHAR(255) NOT NULL',
             '`content` TEXT',
-            '`type` INT(11) NOT NULL',
             '`status` INT(1) NOT NULL DEFAULT 1',
-            '`updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+            '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
         ];
         Db::create(__FUNCTION__, $fields);
     }
@@ -103,8 +113,9 @@ class Migrations
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
             '`name` VARCHAR(64) NOT NULL UNIQUE KEY',
+            '`domain` VARCHAR(255) NOT NULL',
             '`logo` VARCHAR(255) NULL',
-            '`updated_at`TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+            '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
         ];
         Db::create(__FUNCTION__, $fields);
     }
@@ -116,26 +127,51 @@ class Migrations
             '`social_id` INT(11) NOT NULL',
             '`username` VARCHAR(255) NOT NULL',
             '`status` INT(1) NOT NULL DEFAULT 1',
-            '`updated_at`TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+            '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
         ];
         Db::create(__FUNCTION__, $fields);
     }
 
-    private static function populate_user_roles()
+    private static function populate_menu()
     {
-        $names = ['admin', 'creator', 'guest'];
-        $admin = [1, 0, 0];
-        $creator = [1, 1, 0];
-        foreach ($names as $key => $name) {
+        $name = ['Home', 'About', 'Contact', 'Admin'];
+        $admin = [0, 0, 0, 1];
+        $creator = [0, 0, 0, 0];
+        $logged_in = [0, 0, 0, 0];
+        $size = count($name);
+        for ($i = 0; $i < $size; $i++) {
             $fields = [
-                "`name`",
-                "`admin`",
-                "`creator`"
+                'name = :name',
+                'admin = :admin',
+                'creator = :creator',
+                'logged_in = :logged_in'
             ];
             $values = [
-                "'".$name[$key]."'",
-                $admin[$key],
-                $creator[$key]
+                ':name' => $name[$i],
+                ':admin' => $admin[$i],
+                ':creator' => $creator[$i],
+                ':logged_in' => $logged_in[$i]
+            ];
+            Db::insert('menu', $fields, $values);
+        }
+    }
+
+    private static function populate_user_roles()
+    {
+        $name = ['admin', 'creator', 'guest'];
+        $admin = [1, 0, 0];
+        $creator = [1, 1, 0];
+        $size = count($name);
+        for ($i = 0; $i < $size; $i++) {
+            $fields = [
+                'name = :name',
+                'admin = :admin',
+                'creator = :creator'
+            ];
+            $values = [
+                ':name' => $name[$i],
+                ':admin' => $admin[$i],
+                ':creator' => $creator[$i]
             ];
             Db::insert('user_roles', $fields, $values);
         }
@@ -144,7 +180,7 @@ class Migrations
     
     private static function populate_users()
     {
-        $emails = [
+        $email = [
             'admin@nifty.com',
             'creator@nifty.com',
             'guest@nifty.com'
@@ -161,21 +197,21 @@ class Migrations
             date('Y-m-d H:i:s'),
             date('Y-m-d H:i:s')
         ];
-
-        foreach ($emails as $key => $email) {
+        $size = count($email);
+        for ($i = 0; $i < $size; $i++) {
             $fields = [
-                "`email`",
-                "`username`",
-                "`password`",
-                "`role_id`",
-                "`registered_at`"
+                'email = :email',
+                'username = :username',
+                'password = :password',
+                'role_id = :role_id',
+                'registered_at = :registered_at'
             ];
             $values = [
-                "'".$email[$key]."'",
-                "'".$username[$key]."'",
-                "'".$password[$key]."'",
-                $role[$key],
-                "'".$registered_at[$key]."'"
+                ':email' => $email[$i],
+                ':username' => $username[$i],
+                ':password' => $password[$i],
+                ':role_id' => $role[$i],
+                ':registered_at' => $registered_at[$i]
             ];
             Db::insert('users', $fields, $values);
         }
@@ -183,22 +219,27 @@ class Migrations
 
     private static function populate_categories()
     {
-        $names = ['Technology', 'Lifestyle', 'Animals'];
-
-        foreach ($names as $key => $name) {
+        $name = ['Technology', 'Lifestyle', 'Animals'];
+        $size = count($name);
+        for ($i = 0; $i < $size; $i++) {
             $fields = [
-                "`name`"
+                'name = :name'
             ];
             $values = [
-                "'".$name[$key]."'"
+                ':name' => $name[$i]
             ];
             Db::insert('categories', $fields, $values);
         }
     }
 
+    private static function populate_pages()
+    {
+
+    }
+
     private static function populate_posts()
     {
-        $categories = [1, 2, 2, 3, 3, 3];
+        $category = [1, 2, 2, 3, 3, 3];
         $title = [
             'Apple will release a new iOS',
             'Are you sleeping well? Here is our tips to sleep better',
@@ -244,23 +285,23 @@ class Migrations
             '<p>Donec non aliquet ex. Cras luctus lacinia mi, tristique semper dolor tincidunt vel. Suspendisse felis erat, ullamcorper quis blandit at, imperdiet ac orci. Donec viverra sem turpis, eu placerat arcu varius id. Vestibulum pharetra, ipsum quis ultricies dapibus, nibh erat ullamcorper neque, eget mattis quam metus sed purus. Suspendisse sodales ante urna, nec tempor nunc pellentesque vitae. Proin dignissim faucibus leo ac rutrum. In vitae facilisis urna. Pellentesque faucibus id lorem ut ornare. Phasellus felis turpis, ultricies dignissim facilisis at, tempor commodo magna. Aliquam a nisl mi. Sed mattis ante vel nulla aliquet, nec venenatis tortor mollis. In hac habitasse platea dictumst.</p>
             <p>Aliquam mollis lacinia consequat. Vivamus ut feugiat eros, ut consequat justo. Sed blandit imperdiet mi, in malesuada lorem cursus auctor. In aliquet tellus sed convallis lobortis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas posuere nunc at dolor rutrum, non sodales tellus pretium. Curabitur aliquam tempus nibh id ornare. Vestibulum vestibulum nibh lacus, eu ullamcorper nisl cursus ac. Fusce et odio ut erat ullamcorper rhoncus. Vestibulum quis neque velit. Aenean malesuada tortor est, quis lobortis felis bibendum eu. Pellentesque blandit justo imperdiet magna rhoncus posuere. Integer vulputate felis id dui ultricies condimentum. Cras.</p>'
         ];
-
-        foreach ($categories as $key => $category) {
+        $size = count($category);
+        for ($i = 0; $i < $size; $i++) {
             $fields = [
-                "`category_id`",
-                "`author_id`",
-                "`title`",
-                "`date`",
-                "`excerpt`",
-                "`content`"
+                'category_id = :category_id',
+                'author_id = :author_id',
+                'title = :title',
+                'date = :date',
+                'excerpt = :excerpt',
+                'content = :content'
             ];
             $values = [
-                $category[$key],
-                $author[$key],
-                "'".$title[$key]."'",
-                "'".$date[$key]."'",
-                "'".$excerpt[$key]."'",
-                "'".$content[$key]."'"
+                ':category_id' => $category[$i],
+                ':author_id' => $author[$i],
+                ':title' => $title[$i],
+                ':date' => $date[$i],
+                ':excerpt' => $excerpt[$i],
+                ':content' => $content[$i]
             ];
             Db::insert('posts', $fields, $values);
         }
@@ -268,7 +309,7 @@ class Migrations
 
     private static function populate_social_networks()
     {
-        $names = [
+        $name = [
             'Twitter',
             'Facebook',
             'Instagram',
@@ -291,15 +332,15 @@ class Migrations
             'https://www.linkedin.com/',
             'https://www.pinterest.com/'
         ];
-
-        foreach ($names as $key => $name) {
+        $size = count($name);
+        for ($i = 0; $i < $size; $i++) {
             $fields = [
-                "`name`",
-                "`domain`"
+                'name = :name',
+                'domain = :domain'
             ];
             $values = [
-                "'".$name[$key]."'",
-                "'".$domain[$key]."'"
+                ':name' => $name[$i],
+                ':domain' => $domain[$i]
             ];
             Db::insert('social_networks', $fields, $values);
         }
@@ -307,17 +348,17 @@ class Migrations
 
     private static function populate_social_accounts()
     {
-        $socials = [1, 4];
+        $social = [1, 4];
         $username = ['nifty', 'nifty'];
-
-        foreach ($socials as $key => $social) {
+        $size = count($social);
+        for ($i = 0; $i < $size; $i++) {
             $fields = [
-                "`social_id`",
-                "`username`"
+                'social_id = :social_id',
+                'username = :username'
             ];
             $values = [
-                "'".$social[$key]."'",
-                "'".$username[$key]."'"
+                ':social_id' => $social[$i],
+                ':username' => $username[$i]
             ];
             Db::insert('social_accounts', $fields, $values);
         }
@@ -335,7 +376,9 @@ class Migrations
         self::createTables();
         foreach(self::$tables as $table) {
             $func = 'populate_'.$table;
-            self::{$func}();
+            if(method_exists(static::class, $func)) {
+                self::{$func}();
+            }
         }        
     }
 

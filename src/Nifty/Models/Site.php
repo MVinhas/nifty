@@ -8,6 +8,6 @@ class Site
 {
     public static function getMenu()
     {
-        return Db::select(['*'], 'home_menu');
+        return Db::select(['*'], 'menu');
     }
 }

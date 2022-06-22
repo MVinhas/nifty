@@ -75,19 +75,19 @@ class Db
     public static function insert(
         string $table,
         array $fields,
-        array $values
+        array $params
     )
     {
         $db = self::initialize();
         $db->beginTransaction();
 
         try {
-            $sql = "INSERT INTO `".$table;
-            $sql .= "` (".implode(',', $fields).")";
-            $sql .= " VALUES (".implode(',', $values).")";
+            $sql = "INSERT INTO $table SET ";
+            $sql .= implode(',', $fields);
+            echo $sql."\n";
             $query = $db->prepare($sql);
             $db->commit();
-            $query->execute();
+            $query->execute($params);
         } catch (PDOException $e) {
             $db->rollBack();
             throw DatabaseException::cannotInsert($e, $sql);
