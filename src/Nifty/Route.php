@@ -8,11 +8,11 @@ class Route
 {
     public function run()
     {
-        (new Db)->initialize();
-        (new SiteController)->head();
-        (new SiteController)->header();
-        (new Route)->contentToRender();
-        (new SiteController)->footer();
+        (new Db())->initialize();
+        (new SiteController())->head();
+        (new SiteController())->header();
+        (new Route())->contentToRender();
+        (new SiteController())->footer();
     }
 
     private function contentToRender()
@@ -22,11 +22,11 @@ class Route
             $controller = $uri->controller;
             $method = $uri->method;
             $params = $uri->params;
-            $params ? (new $controller)->{$method}(...$params) : (new $controller)->{$method}();
+            $params ? (new $controller())->{$method}(...$params) : (new $controller())->{$method}();
         }
     }
 
-    private function getURI() : object
+    private function getURI(): object
     {
         $url = explode(
             '/',

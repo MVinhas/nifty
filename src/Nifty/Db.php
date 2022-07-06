@@ -10,7 +10,7 @@ use PDOException;
 
 class Db
 {
-    public function initialize() : PDO
+    public function initialize(): PDO
     {
         try {
             return new PDO(
@@ -28,7 +28,7 @@ class Db
         }
     }
 
-    public function create(string $table, array $fields) : void
+    public function create(string $table, array $fields): void
     {
         $db = self::initialize();
         $db->beginTransaction();
@@ -45,7 +45,7 @@ class Db
         array $fields,
         string $table,
         array $where = []
-    ) : object {
+    ): object {
         $db = self::initialize();
         $db->beginTransaction();
         $sql = "SELECT ";
@@ -64,7 +64,7 @@ class Db
         string $table,
         array $fields,
         array $params
-    ) : void {
+    ): void {
         $db = self::initialize();
         $db->beginTransaction();
         $sql = "INSERT INTO $table SET ";
@@ -76,7 +76,7 @@ class Db
         $query->execute($params);
     }
 
-    public function clean(string $table) : void
+    public function clean(string $table): void
     {
         $db = self::initialize();
         $db->beginTransaction();
@@ -86,7 +86,7 @@ class Db
         $query->execute();
     }
 
-    public function drop(string $table) : void
+    public function drop(string $table): void
     {
         $db = self::initialize();
         $db->beginTransaction();

@@ -1,4 +1,5 @@
 <?php
+
 use Nifty\Db;
 use PHPUnit\Framework\TestCase;
 

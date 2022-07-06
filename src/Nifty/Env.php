@@ -16,7 +16,7 @@ class Env
         $this->path = $path;
     }
 
-    public function load() : void
+    public function load(): void
     {
         if (!is_readable($this->path)) {
             throw new \RuntimeException(

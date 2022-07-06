@@ -39,7 +39,7 @@ class Migrations
             '`logged_in` INT(1) NOT NULL DEFAULT 0',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        (new Db)->create(__FUNCTION__, $fields);
+        (new Db())->create(__FUNCTION__, $fields);
     }
 
     private static function user_roles()
@@ -51,7 +51,7 @@ class Migrations
             '`creator` INT(1) NOT NULL DEFAULT 0',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        (new Db)->create(__FUNCTION__, $fields);
+        (new Db())->create(__FUNCTION__, $fields);
     }
 
     private static function users()
@@ -66,7 +66,7 @@ class Migrations
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
             '`status` TINYINT(1) NOT NULL DEFAULT 1'
         ];
-        (new Db)->create(__FUNCTION__, $fields);
+        (new Db())->create(__FUNCTION__, $fields);
     }
 
     private static function posts()
@@ -84,7 +84,7 @@ class Migrations
             '`status` INT(1) NOT NULL DEFAULT 1',
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
         ];
-        (new Db)->create(__FUNCTION__, $fields);
+        (new Db())->create(__FUNCTION__, $fields);
     }
 
     private static function categories()
@@ -93,7 +93,7 @@ class Migrations
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
             '`name` VARCHAR(64) NOT NULL'
         ];
-        (new Db)->create(__FUNCTION__, $fields);
+        (new Db())->create(__FUNCTION__, $fields);
     }
 
     private static function pages()
@@ -105,7 +105,7 @@ class Migrations
             '`status` INT(1) NOT NULL DEFAULT 1',
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
         ];
-        (new Db)->create(__FUNCTION__, $fields);
+        (new Db())->create(__FUNCTION__, $fields);
     }
 
     private static function social_networks()
@@ -117,7 +117,7 @@ class Migrations
             '`logo` VARCHAR(255) NULL',
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
         ];
-        (new Db)->create(__FUNCTION__, $fields);
+        (new Db())->create(__FUNCTION__, $fields);
     }
 
     private static function social_accounts()
@@ -129,7 +129,7 @@ class Migrations
             '`status` INT(1) NOT NULL DEFAULT 1',
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
         ];
-        (new Db)->create(__FUNCTION__, $fields);
+        (new Db())->create(__FUNCTION__, $fields);
     }
 
     private static function populate_menu()
@@ -152,7 +152,7 @@ class Migrations
                 ':creator' => $creator[$i],
                 ':logged_in' => $logged_in[$i]
             ];
-            (new Db)->upsert('menu', $fields, $values);
+            (new Db())->upsert('menu', $fields, $values);
         }
     }
 
@@ -173,7 +173,7 @@ class Migrations
                 ':admin' => $admin[$i],
                 ':creator' => $creator[$i]
             ];
-            (new Db)->upsert('user_roles', $fields, $values);
+            (new Db())->upsert('user_roles', $fields, $values);
         }
     }
 
@@ -212,7 +212,7 @@ class Migrations
                 ':role_id' => $role[$i],
                 ':registered_at' => $registered_at[$i]
             ];
-            (new Db)->upsert('users', $fields, $values);
+            (new Db())->upsert('users', $fields, $values);
         }
     }
 
@@ -227,7 +227,7 @@ class Migrations
             $values = [
                 ':name' => $name[$i]
             ];
-            (new Db)->upsert('categories', $fields, $values);
+            (new Db())->upsert('categories', $fields, $values);
         }
     }
 
@@ -301,7 +301,7 @@ class Migrations
                 ':excerpt' => $excerpt[$i],
                 ':content' => $content[$i]
             ];
-            (new Db)->upsert('posts', $fields, $values);
+            (new Db())->upsert('posts', $fields, $values);
         }
     }
 
@@ -340,7 +340,7 @@ class Migrations
                 ':name' => $name[$i],
                 ':domain' => $domain[$i]
             ];
-            (new Db)->upsert('social_networks', $fields, $values);
+            (new Db())->upsert('social_networks', $fields, $values);
         }
     }
 
@@ -358,7 +358,7 @@ class Migrations
                 ':social_id' => $social[$i],
                 ':username' => $username[$i]
             ];
-            (new Db)->upsert('social_accounts', $fields, $values);
+            (new Db())->upsert('social_accounts', $fields, $values);
         }
     }
 
@@ -383,7 +383,7 @@ class Migrations
     private static function cleanTables()
     {
         foreach (self::$tables as $table) {
-            (new Db)->clean($table);
+            (new Db())->clean($table);
         }
     }
 
@@ -391,7 +391,7 @@ class Migrations
     {
         self::cleanTables();
         foreach (self::$tables as $table) {
-            (new Db)->drop($table);
+            (new Db())->drop($table);
         }
     }
 }

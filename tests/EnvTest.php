@@ -1,4 +1,5 @@
 <?php
+
 use Nifty\Env;
 use PHPUnit\Framework\TestCase;
 

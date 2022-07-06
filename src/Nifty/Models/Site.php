@@ -8,6 +8,6 @@ class Site
 {
     public function getMenu()
     {
-        return (new Db)->select(['*'], 'menu');
+        return (new Db())->select(['*'], 'menu');
     }
 }

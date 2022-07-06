@@ -14,7 +14,7 @@ class Controller
         include __DIR__.'/../../../resources/views/'.strtolower($this->path()).'/'.$this->file();
     }
 
-    private function path() : string
+    private function path(): string
     {
         $explode = explode(
             '/',
@@ -23,7 +23,7 @@ class Controller
         return str_replace('Controller.php', '', end($explode));
     }
 
-    private function file() : string
+    private function file(): string
     {
         return debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3)[2]['function'].'.php';
     }

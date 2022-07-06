@@ -14,7 +14,7 @@ class SiteController extends Controller
     public function header()
     {
         $data = (object)[];
-        $data->menu = (new Site)->getMenu();
+        $data->menu = (new Site())->getMenu();
         return $this->view($data);
     }
 
@@ -25,6 +25,6 @@ class SiteController extends Controller
 
     public function index()
     {
-        return (new \Nifty\Controllers\HomeController)->index();
+        return (new \Nifty\Controllers\HomeController())->index();
     }
 }
