@@ -10,7 +10,7 @@ use PDOException;
 
 class Db
 {
-    public static function initialize()
+    public function initialize() : PDO
     {
         try {
             return new PDO(
@@ -20,7 +20,7 @@ class Db
                 [
                     PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
                     PDO::ATTR_TIMEOUT => '5',
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION  
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
                 ]
             );
         } catch (PDOException $e) {
@@ -28,99 +28,71 @@ class Db
         }
     }
 
-    public static function create(string $table, array $fields)
+    public function create(string $table, array $fields) : void
     {
         $db = self::initialize();
         $db->beginTransaction();
 
-        try {
-            $sql = 'CREATE TABLE IF NOT EXISTS `'.$table.'`(';
-            $sql .= implode(',', $fields);
-            $sql .= ')';
-            $query = $db->prepare($sql);
-            $db->commit();
-            $query->execute();
-        } catch (PDOException $e) {
-            $db->rollback();
-            throw DatabaseException::cannotCreate($e);
-        }
+        $sql = 'CREATE TABLE IF NOT EXISTS `'.$table.'`(';
+        $sql .= implode(',', $fields);
+        $sql .= ')';
+        $query = $db->prepare($sql);
+        $db->commit();
+        $query->execute();
     }
 
-    public static function select(
+    public function select(
         array $fields,
         string $table,
         array $where = []
-    )
-    {
+    ) : object {
         $db = self::initialize();
         $db->beginTransaction();
-
-        try {
-            $sql = "SELECT ";
-            $sql.= implode(',', $fields);
-            $sql.= ' FROM `'.$table.'`';
-            if (!empty($where)) {
-                $sql.= ' WHERE '.implode(',', $where);
-            }
-            $query = $db->prepare($sql);
-            $db->commit();
-            $query->execute();
-            return (object)$query->fetchAll(PDO::FETCH_OBJ);
-        } catch (PDOException $e) {
-            $db->rollback();
-            throw DatabaseException::cannotSelect($e);
+        $sql = "SELECT ";
+        $sql.= implode(',', $fields);
+        $sql.= ' FROM `'.$table.'`';
+        if (!empty($where)) {
+            $sql.= ' WHERE '.implode(',', $where);
         }
+        $query = $db->prepare($sql);
+        $db->commit();
+        $query->execute();
+        return (object)$query->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public static function insert(
+    public function upsert(
         string $table,
         array $fields,
         array $params
-    )
-    {
+    ) : void {
         $db = self::initialize();
         $db->beginTransaction();
-
-        try {
-            $sql = "INSERT INTO $table SET ";
-            $sql .= implode(',', $fields);
-            echo $sql."\n";
-            $query = $db->prepare($sql);
-            $db->commit();
-            $query->execute($params);
-        } catch (PDOException $e) {
-            $db->rollBack();
-            throw DatabaseException::cannotInsert($e, $sql);
-        }
+        $sql = "INSERT INTO $table SET ";
+        $sql .= implode(',', $fields);
+        $sql .= " ON DUPLICATE KEY UPDATE ";
+        $sql .= implode(',', $fields);
+        $query = $db->prepare($sql);
+        $db->commit();
+        $query->execute($params);
     }
 
-    public static function clean(string $table)
+    public function clean(string $table) : void
     {
         $db = self::initialize();
         $db->beginTransaction();
-        try {
-            $sql = "DELETE FROM $table";
-            $query = $db->prepare($sql);
-            $db->commit();
-            $query->execute();
-        } catch (PDOException $e) {
-            $db->rollback();
-            throw DatabaseException::cannotClean($e, $sql);
-        }
+        $sql = "DELETE FROM $table";
+        $query = $db->prepare($sql);
+        $db->commit();
+        $query->execute();
     }
 
-    public static function drop(string $table)
+    public function drop(string $table) : void
     {
         $db = self::initialize();
         $db->beginTransaction();
-        try {
-            $sql = "DROP TABLE $table";
-            $query = $db->prepare($sql);
-            $db->commit();
-            $query->execute();
-        } catch (PDOException $e) {
-            $db->rollback();
-            throw DatabaseException::cannotDrop($e, $sql);
-        }
+        $sql = "DROP TABLE $table";
+        $query = $db->prepare($sql);
+        $db->commit();
+        $query->execute();
     }
 }

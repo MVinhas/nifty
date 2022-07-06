@@ -5,7 +5,7 @@
         Published on 07-07-2007
     </div>
     <div class="col-lg-6 mx-auto">
-      <p class="lead mb-4">Welcome to Nifty! Here you will find a clear and simple to manage Content Management System to create your first blog!</p>
+      <p class="lead mb-4">Welcome to Nifty! Let's create a great PHP MVC Framework!</p>
     </div>
   </div>
 </main>

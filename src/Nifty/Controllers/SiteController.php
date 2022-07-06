@@ -6,24 +6,24 @@ use Nifty\Models\Site;
 
 class SiteController extends Controller
 {
-    public static function head()
+    public function head()
     {
-        return self::view();
+        return $this->view();
     }
 
-    public static function header()
+    public function header()
     {
         $data = (object)[];
-        $data->menu = Site::getMenu();
-        return self::view($data);
+        $data->menu = (new Site)->getMenu();
+        return $this->view($data);
     }
 
-    public static function footer()
+    public function footer()
     {
-        return self::view();
+        return $this->view();
     }
 
-    public static function index()
+    public function index()
     {
         return (new \Nifty\Controllers\HomeController)->index();
     }

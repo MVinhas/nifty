@@ -2,20 +2,31 @@
 
 namespace Nifty;
 
+use Nifty\Controllers\SiteController;
+
 class Route
 {
-    public static function contentToRender()
+    public function run()
     {
-        $uri = self::getURI();
+        (new Db)->initialize();
+        (new SiteController)->head();
+        (new SiteController)->header();
+        (new Route)->contentToRender();
+        (new SiteController)->footer();
+    }
+
+    private function contentToRender()
+    {
+        $uri = $this->getURI();
         if (class_exists($uri->controller)) {
             $controller = $uri->controller;
             $method = $uri->method;
             $params = $uri->params;
-            $params ? $controller::{$method}(...$params) : $controller::{$method}();
+            $params ? (new $controller)->{$method}(...$params) : (new $controller)->{$method}();
         }
     }
 
-    private static function getURI()
+    private function getURI() : object
     {
         $url = explode(
             '/',
@@ -23,12 +34,12 @@ class Route
         );
 
         /**
-         * 
+         *
          * 0 Domain
          * 1 Controller
          * 2 Method
          * 3+ Args
-         * 
+         *
          */
         $controllerArg = $url[1] ?? null;
         $methodArg = $url[2] ?? null;
@@ -38,8 +49,8 @@ class Route
             $parameterArgs[] = $url[$i] ?? null;
         }
 
-        $controller = !empty($controllerArg) ? 
-            '\Nifty\Controllers\\'.$controllerArg.'Controller' : 
+        $controller = !empty($controllerArg) ?
+            '\Nifty\Controllers\\'.$controllerArg.'Controller' :
             '\Nifty\Controllers\HomeController';
 
         $method = !empty($methodArg) ? $methodArg : 'index';

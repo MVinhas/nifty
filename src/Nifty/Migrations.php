@@ -28,7 +28,7 @@ class Migrations
             self::{$arg}();
         }
     }
-    
+
     private static function menu()
     {
         $fields = [
@@ -39,7 +39,7 @@ class Migrations
             '`logged_in` INT(1) NOT NULL DEFAULT 0',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        Db::create(__FUNCTION__, $fields);
+        (new Db)->create(__FUNCTION__, $fields);
     }
 
     private static function user_roles()
@@ -51,7 +51,7 @@ class Migrations
             '`creator` INT(1) NOT NULL DEFAULT 0',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        Db::create(__FUNCTION__, $fields);
+        (new Db)->create(__FUNCTION__, $fields);
     }
 
     private static function users()
@@ -66,7 +66,7 @@ class Migrations
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
             '`status` TINYINT(1) NOT NULL DEFAULT 1'
         ];
-        Db::create(__FUNCTION__, $fields);
+        (new Db)->create(__FUNCTION__, $fields);
     }
 
     private static function posts()
@@ -84,7 +84,7 @@ class Migrations
             '`status` INT(1) NOT NULL DEFAULT 1',
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
         ];
-        Db::create(__FUNCTION__, $fields);
+        (new Db)->create(__FUNCTION__, $fields);
     }
 
     private static function categories()
@@ -93,7 +93,7 @@ class Migrations
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
             '`name` VARCHAR(64) NOT NULL'
         ];
-        Db::create(__FUNCTION__, $fields);
+        (new Db)->create(__FUNCTION__, $fields);
     }
 
     private static function pages()
@@ -105,7 +105,7 @@ class Migrations
             '`status` INT(1) NOT NULL DEFAULT 1',
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
         ];
-        Db::create(__FUNCTION__, $fields);
+        (new Db)->create(__FUNCTION__, $fields);
     }
 
     private static function social_networks()
@@ -117,7 +117,7 @@ class Migrations
             '`logo` VARCHAR(255) NULL',
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
         ];
-        Db::create(__FUNCTION__, $fields);
+        (new Db)->create(__FUNCTION__, $fields);
     }
 
     private static function social_accounts()
@@ -129,7 +129,7 @@ class Migrations
             '`status` INT(1) NOT NULL DEFAULT 1',
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
         ];
-        Db::create(__FUNCTION__, $fields);
+        (new Db)->create(__FUNCTION__, $fields);
     }
 
     private static function populate_menu()
@@ -152,7 +152,7 @@ class Migrations
                 ':creator' => $creator[$i],
                 ':logged_in' => $logged_in[$i]
             ];
-            Db::insert('menu', $fields, $values);
+            (new Db)->upsert('menu', $fields, $values);
         }
     }
 
@@ -173,11 +173,10 @@ class Migrations
                 ':admin' => $admin[$i],
                 ':creator' => $creator[$i]
             ];
-            Db::insert('user_roles', $fields, $values);
+            (new Db)->upsert('user_roles', $fields, $values);
         }
-
     }
-    
+
     private static function populate_users()
     {
         $email = [
@@ -213,7 +212,7 @@ class Migrations
                 ':role_id' => $role[$i],
                 ':registered_at' => $registered_at[$i]
             ];
-            Db::insert('users', $fields, $values);
+            (new Db)->upsert('users', $fields, $values);
         }
     }
 
@@ -228,13 +227,12 @@ class Migrations
             $values = [
                 ':name' => $name[$i]
             ];
-            Db::insert('categories', $fields, $values);
+            (new Db)->upsert('categories', $fields, $values);
         }
     }
 
     private static function populate_pages()
     {
-
     }
 
     private static function populate_posts()
@@ -268,20 +266,20 @@ class Migrations
         $content = [
             '<p>Aenean pulvinar lorem diam, eget tempor arcu maximus in. Quisque posuere, dolor in tempor placerat, massa ligula iaculis lorem, vitae congue libero risus pellentesque metus. Aliquam iaculis, lorem sit amet imperdiet pretium, ipsum est cursus mauris, sed vulputate mauris ipsum ut nunc. Phasellus tempor neque id pretium volutpat. Integer eu diam rutrum, pharetra ex vitae, hendrerit arcu. Sed mollis arcu sit amet lorem dictum, lacinia ultrices turpis mollis. Maecenas tortor diam, dignissim vitae molestie ac, tincidunt sit amet eros. Sed suscipit leo massa, ut pellentesque quam efficitur sed. Cras at dolor ante. Integer eu ante eget neque viverra hendrerit. In rutrum feugiat purus in viverra.</p>
             <p>Mauris tempor leo eget mauris ornare, in varius mauris tincidunt. Vivamus eu condimentum neque, non euismod mauris. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean egestas, nisi vitae malesuada facilisis, metus felis fermentum justo, vitae consequat orci lorem at mauris. Maecenas pharetra tristique velit, dictum placerat nisi dapibus id. Sed at nisl eget tortor eleifend fermentum. Aliquam arcu libero, sagittis ac ultrices vitae, porttitor nec velit. Proin enim massa, porta at scelerisque nec, condimentum sed tellus. Fusce a nulla dui. Vestibulum lobortis mauris ut augue pulvinar, non semper felis.</p>',
-            
+
             '<p>Nullam aliquet arcu at dignissim rhoncus. Ut sed porttitor felis, et feugiat libero. Quisque id ultrices tellus. Donec eu aliquam sem, vitae pulvinar lacus. Donec vel ante a purus dapibus consectetur. Donec nisl mi, laoreet et pellentesque sit amet, efficitur in sapien. Proin aliquet tortor at posuere fermentum. Cras aliquam bibendum nisl at feugiat. Suspendisse neque eros, bibendum nec vehicula eget, suscipit non dolor.</p>
             <p>Nullam eu velit eros. Nullam quis eros quam. Donec suscipit magna eu magna auctor ultricies. Sed non turpis a velit tempor aliquet eget eu augue. Proin mollis, leo ac condimentum consectetur, ligula ex volutpat ipsum, in varius ligula magna ut magna. Curabitur quis suscipit justo. Vivamus varius arcu ut tortor laoreet, nec lacinia mauris tempus. Donec iaculis ac lectus at iaculis. Integer sem neque, sagittis sit amet tincidunt vitae, consequat aliquam purus. Donec faucibus pellentesque lacinia. Proin dictum, est id sagittis volutpat, odio magna posuere massa, ac scelerisque dolor ligula sit amet est. Ut risus magna, iaculis sed porta in, imperdiet ac neque. Ut lacinia lobortis sem eget convallis. Nulla facilisi. Fusce commodo ultrices facilisis. Aliquam erat volutpat. Vestibulum a eleifend sapien, a cursus mauris. Etiam nunc mi, malesuada vel malesuada sit amet, tincidunt in felis.</p>',
-            
+
             '<p>Maecenas eget dui tempus, maximus tortor id, tempor orci. Phasellus luctus velit a molestie mattis. Vestibulum tempus nibh et tortor accumsan faucibus. Quisque bibendum rhoncus rhoncus. Praesent aliquam, odio at commodo bibendum, dui nisl consequat lorem, at finibus sapien erat in mauris. Nullam maximus non eros vel iaculis. Proin non fermentum neque, nec blandit nunc. Vivamus consectetur placerat sollicitudin. Mauris quis urna et leo faucibus volutpat. Vivamus cursus consequat libero sed suscipit. Quisque feugiat, quam in pharetra auctor, metus sem gravida diam, quis molestie magna quam eget dolor. Donec faucibus pulvinar lectus, in mollis elit tempor sed. Aliquam eu nisl posuere, lobortis sapien in, pharetra orci. Aenean finibus et est vel accumsan. Praesent hendrerit vel ex cursus consequat.</p>
             <p>Vestibulum aliquam sem vitae dui ultricies, at tincidunt neque dictum. Morbi hendrerit tellus et neque sagittis, sit amet molestie nulla volutpat. Etiam commodo dolor vitae dui sagittis ultricies. Aenean tellus tortor, sodales hendrerit tincidunt et, imperdiet aliquam libero. Ut pellentesque sed urna eget congue. Duis ipsum nunc, convallis et metus eu, iaculis sollicitudin turpis. Aenean sed ultricies tortor. Cras ac consectetur ante. Suspendisse et nulla feugiat, rhoncus nibh quis, luctus erat. Sed volutpat, felis non mollis cursus, est lectus porta arcu, sit.</p>',
-            
+
             '<p>Praesent vel ipsum et enim facilisis consectetur at sit amet ligula. Pellentesque tempor quam elit, id egestas lorem condimentum eu. Nullam placerat eget magna at congue. Praesent cursus quam eget dui porta accumsan. In iaculis diam rhoncus faucibus mollis. Donec enim risus, commodo at enim non, gravida congue enim. Donec aliquam justo in risus suscipit rhoncus. Maecenas viverra dictum porta. Nam sem lorem, lobortis sit amet bibendum in, dapibus eu eros. Etiam volutpat nisi id dui dignissim, id efficitur ipsum iaculis. Suspendisse faucibus convallis neque. Duis sed ullamcorper nulla. In sem tortor, malesuada ut risus eget, hendrerit gravida turpis. Suspendisse rutrum malesuada ligula commodo venenatis. Quisque ultricies porta libero vel luctus.</p>
             <p>Suspendisse quis velit vel urna varius ultricies sed nec leo. Phasellus sed lectus elit. Suspendisse rhoncus ligula vel magna ullamcorper porttitor eget vitae tellus. Phasellus fringilla blandit ipsum. Nullam eleifend vitae lectus non mollis. Phasellus eu mauris at eros pulvinar tincidunt. Mauris semper, mauris id venenatis porttitor, tellus libero viverra turpis, vel fermentum lacus mi ac est. Nunc in aliquam justo. Suspendisse potenti. Vestibulum in metus nisl. Morbi quam neque, tincidunt sit amet leo posuere, sagittis mollis nibh. Donec dictum blandit nibh vel congue. Mauris faucibus sit amet magna.</p>',
-            
+
             '<p>Nam sapien ipsum, maximus eu mollis id, fringilla rhoncus sapien. Etiam quis luctus elit. Morbi pulvinar, odio vel cursus semper, eros sem aliquet elit, at vestibulum mauris lacus ut dolor. Proin molestie ante quis sagittis lacinia. Aenean vel tincidunt magna. Suspendisse potenti. Donec vulputate sem quis nulla molestie consequat.</p>
             <p>Curabitur auctor erat ante, vel vestibulum ligula pretium eget. Quisque libero lectus, ullamcorper at venenatis eu, tempus sed nisl. Sed et lacinia turpis. Etiam id ultrices quam. Mauris neque metus, condimentum ac ex vel, ultrices venenatis tellus. Nullam eget semper elit. Vivamus eu mi sit amet diam tristique consectetur sed a orci. Praesent pretium massa id sem ultricies mollis. Maecenas a lacus at sapien varius dictum. Aliquam imperdiet pretium dolor sit amet ultrices. Suspendisse condimentum nibh lorem. Phasellus imperdiet pharetra quam, at porttitor ex vestibulum eu. Pellentesque vitae mi consectetur, commodo purus id, volutpat elit. Quisque consectetur, quam ac placerat aliquet, tortor neque rhoncus tellus, at dignissim eros sem porttitor tellus.</p>
             <p>Etiam eleifend ipsum sed odio gravida, in venenatis est pharetra. Sed dignissim cursus ullamcorper. In eget sem sapien. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer molestie tincidunt diam sollicitudin convallis. Ut venenatis mi.</p>',
-            
+
             '<p>Donec non aliquet ex. Cras luctus lacinia mi, tristique semper dolor tincidunt vel. Suspendisse felis erat, ullamcorper quis blandit at, imperdiet ac orci. Donec viverra sem turpis, eu placerat arcu varius id. Vestibulum pharetra, ipsum quis ultricies dapibus, nibh erat ullamcorper neque, eget mattis quam metus sed purus. Suspendisse sodales ante urna, nec tempor nunc pellentesque vitae. Proin dignissim faucibus leo ac rutrum. In vitae facilisis urna. Pellentesque faucibus id lorem ut ornare. Phasellus felis turpis, ultricies dignissim facilisis at, tempor commodo magna. Aliquam a nisl mi. Sed mattis ante vel nulla aliquet, nec venenatis tortor mollis. In hac habitasse platea dictumst.</p>
             <p>Aliquam mollis lacinia consequat. Vivamus ut feugiat eros, ut consequat justo. Sed blandit imperdiet mi, in malesuada lorem cursus auctor. In aliquet tellus sed convallis lobortis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas posuere nunc at dolor rutrum, non sodales tellus pretium. Curabitur aliquam tempus nibh id ornare. Vestibulum vestibulum nibh lacus, eu ullamcorper nisl cursus ac. Fusce et odio ut erat ullamcorper rhoncus. Vestibulum quis neque velit. Aenean malesuada tortor est, quis lobortis felis bibendum eu. Pellentesque blandit justo imperdiet magna rhoncus posuere. Integer vulputate felis id dui ultricies condimentum. Cras.</p>'
         ];
@@ -303,7 +301,7 @@ class Migrations
                 ':excerpt' => $excerpt[$i],
                 ':content' => $content[$i]
             ];
-            Db::insert('posts', $fields, $values);
+            (new Db)->upsert('posts', $fields, $values);
         }
     }
 
@@ -342,7 +340,7 @@ class Migrations
                 ':name' => $name[$i],
                 ':domain' => $domain[$i]
             ];
-            Db::insert('social_networks', $fields, $values);
+            (new Db)->upsert('social_networks', $fields, $values);
         }
     }
 
@@ -360,13 +358,13 @@ class Migrations
                 ':social_id' => $social[$i],
                 ':username' => $username[$i]
             ];
-            Db::insert('social_accounts', $fields, $values);
+            (new Db)->upsert('social_accounts', $fields, $values);
         }
     }
 
     private static function createTables()
     {
-        foreach(self::$tables as $table) {
+        foreach (self::$tables as $table) {
             self::{$table}();
         }
     }
@@ -374,18 +372,18 @@ class Migrations
     private static function populate()
     {
         self::createTables();
-        foreach(self::$tables as $table) {
+        foreach (self::$tables as $table) {
             $func = 'populate_'.$table;
-            if(method_exists(static::class, $func)) {
+            if (method_exists(static::class, $func)) {
                 self::{$func}();
             }
-        }        
+        }
     }
 
     private static function cleanTables()
     {
         foreach (self::$tables as $table) {
-            Db::clean($table);
+            (new Db)->clean($table);
         }
     }
 
@@ -393,7 +391,7 @@ class Migrations
     {
         self::cleanTables();
         foreach (self::$tables as $table) {
-            Db::drop($table);
+            (new Db)->drop($table);
         }
     }
 }

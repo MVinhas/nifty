@@ -8,7 +8,7 @@ class Env
 
     public function __construct(string $path)
     {
-        if(!file_exists($path)) {
+        if (!file_exists($path)) {
             throw new \InvalidArgumentException(
                 sprintf('%s does not exist', $path)
             );
@@ -25,10 +25,10 @@ class Env
         }
 
         $lines = file(
-            $this->path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
+            $this->path,
+            FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
         );
         foreach ($lines ?? array() as $line) {
-
             if (strpos(trim($line), '#') === 0) {
                 continue;
             }

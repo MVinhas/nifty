@@ -6,8 +6,8 @@ use Nifty\Db;
 
 class Site
 {
-    public static function getMenu()
+    public function getMenu()
     {
-        return Db::select(['*'], 'menu');
+        return (new Db)->select(['*'], 'menu');
     }
 }

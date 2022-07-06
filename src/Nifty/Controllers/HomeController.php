@@ -6,8 +6,8 @@ use Nifty\Models\Home;
 
 class HomeController extends Controller
 {
-    public static function index()
+    public function index()
     {
-        return self::view();
+        return $this->view();
     }
 }
