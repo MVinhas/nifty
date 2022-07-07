@@ -9,7 +9,7 @@ class Controller
      * Know who called me, get the view path from that information
      * and also the filename to be called
      */
-    public function view(object $data = null)
+    public function view(object $data = null): void
     {
         include __DIR__.'/../../../resources/views/'.strtolower($this->path()).'/'.$this->file();
     }
