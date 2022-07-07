@@ -37,6 +37,9 @@ class Migrations
             '`admin` INT(1) NOT NULL DEFAULT 0',
             '`creator` INT(1) NOT NULL DEFAULT 0',
             '`logged_in` INT(1) NOT NULL DEFAULT 0',
+            '`child_of` INT(11) NULL',
+            '`status` TINYINT(1) NOT NULL DEFAULT 1',
+            '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
         (new Db())->create(__FUNCTION__, $fields);
@@ -49,6 +52,7 @@ class Migrations
             '`name` VARCHAR(60) NOT NULL',
             '`admin` INT(1) NOT NULL DEFAULT 0',
             '`creator` INT(1) NOT NULL DEFAULT 0',
+            '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
         (new Db())->create(__FUNCTION__, $fields);
@@ -63,8 +67,9 @@ class Migrations
             '`password` VARCHAR(255) NOT NULL',
             '`role_id` INT(1) NOT NULL DEFAULT 3',
             '`registered_at` TIMESTAMP',
-            '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
-            '`status` TINYINT(1) NOT NULL DEFAULT 1'
+            '`status` TINYINT(1) NOT NULL DEFAULT 1',
+            '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
         (new Db())->create(__FUNCTION__, $fields);
     }
@@ -81,8 +86,9 @@ class Migrations
             '`excerpt` TEXT',
             '`content` TEXT',
             '`kudos` INT(11) NOT NULL DEFAULT 0',
-            '`status` INT(1) NOT NULL DEFAULT 1',
-            '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+            '`status` TINYINT(1) NOT NULL DEFAULT 1',
+            '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
         (new Db())->create(__FUNCTION__, $fields);
     }
@@ -91,7 +97,10 @@ class Migrations
     {
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
-            '`name` VARCHAR(64) NOT NULL'
+            '`name` VARCHAR(64) NOT NULL',
+            '`status` TINYINT(1) NOT NULL DEFAULT 1',
+            '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
         (new Db())->create(__FUNCTION__, $fields);
     }
@@ -102,8 +111,9 @@ class Migrations
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
             '`title` VARCHAR(255) NOT NULL',
             '`content` TEXT',
-            '`status` INT(1) NOT NULL DEFAULT 1',
-            '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+            '`status` TINYINT(1) NOT NULL DEFAULT 1',
+            '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
         (new Db())->create(__FUNCTION__, $fields);
     }
@@ -115,7 +125,9 @@ class Migrations
             '`name` VARCHAR(64) NOT NULL UNIQUE KEY',
             '`domain` VARCHAR(255) NOT NULL',
             '`logo` VARCHAR(255) NULL',
-            '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+            '`status` TINYINT(1) NOT NULL DEFAULT 1',
+            '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
         (new Db())->create(__FUNCTION__, $fields);
     }
@@ -125,8 +137,10 @@ class Migrations
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
             '`social_id` INT(11) NOT NULL',
+            '`user_id` INT(11) NOT NULL',
             '`username` VARCHAR(255) NOT NULL',
-            '`status` INT(1) NOT NULL DEFAULT 1',
+            '`status` TINYINT(1) NOT NULL DEFAULT 1',
+            '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
         ];
         (new Db())->create(__FUNCTION__, $fields);
@@ -138,6 +152,7 @@ class Migrations
         $admin = [0, 0, 0, 1];
         $creator = [0, 0, 0, 0];
         $logged_in = [0, 0, 0, 0];
+
         $size = count($name);
         for ($i = 0; $i < $size; $i++) {
             $fields = [
