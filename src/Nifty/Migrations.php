@@ -34,10 +34,13 @@ class Migrations
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
             '`name` VARCHAR(60) NOT NULL',
-            '`admin` INT(1) NOT NULL DEFAULT 0',
-            '`creator` INT(1) NOT NULL DEFAULT 0',
-            '`logged_in` INT(1) NOT NULL DEFAULT 0',
+            '`admin` TINYINT(1) NOT NULL DEFAULT 0',
+            '`creator` TINYINT(1) NOT NULL DEFAULT 0',
+            '`logged_in` TINYINT(1) NOT NULL DEFAULT 0',
             '`child_of` INT(11) NULL',
+            '`dropdown` TINYINT(1) NOT NULL DEFAULT 0',
+            '`new_section` TINYINT(1) NOT NULL DEFAULT 0',
+            '`disabled` TINYINT(1) NOT NULL DEFAULT 0',
             '`status` TINYINT(1) NOT NULL DEFAULT 1',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
@@ -50,8 +53,8 @@ class Migrations
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
             '`name` VARCHAR(60) NOT NULL',
-            '`admin` INT(1) NOT NULL DEFAULT 0',
-            '`creator` INT(1) NOT NULL DEFAULT 0',
+            '`admin` TINYINT(1) NOT NULL DEFAULT 0',
+            '`creator` TINYINT(1) NOT NULL DEFAULT 0',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
@@ -65,7 +68,7 @@ class Migrations
             '`email` VARCHAR(100) NOT NULL UNIQUE KEY',
             '`username` VARCHAR(30) NOT NULL',
             '`password` VARCHAR(255) NOT NULL',
-            '`role_id` INT(1) NOT NULL DEFAULT 3',
+            '`role_id` TINYINT(1) NOT NULL DEFAULT 3',
             '`registered_at` TIMESTAMP',
             '`status` TINYINT(1) NOT NULL DEFAULT 1',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
