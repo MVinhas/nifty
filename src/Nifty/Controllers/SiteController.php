@@ -22,9 +22,4 @@ class SiteController extends Controller
     {
         return $this->view();
     }
-
-    public function index()
-    {
-        return (new \Nifty\Controllers\HomeController())->index();
-    }
 }
