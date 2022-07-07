@@ -30,7 +30,7 @@ class Db
 
     public function create(string $table, array $fields): void
     {
-        $db = self::initialize();
+        $db = $this->initialize();
         $db->beginTransaction();
 
         $sql = 'CREATE TABLE IF NOT EXISTS `'.$table.'`(';
@@ -46,7 +46,7 @@ class Db
         string $table,
         array $where = []
     ): object {
-        $db = self::initialize();
+        $db = $this->initialize();
         $db->beginTransaction();
         $sql = "SELECT ";
         $sql.= implode(',', $fields);
@@ -65,7 +65,7 @@ class Db
         array $fields,
         array $params
     ): void {
-        $db = self::initialize();
+        $db = $this->initialize();
         $db->beginTransaction();
         $sql = "INSERT INTO $table SET ";
         $sql .= implode(',', $fields);
@@ -78,7 +78,7 @@ class Db
 
     public function clean(string $table): void
     {
-        $db = self::initialize();
+        $db = $this->initialize();
         $db->beginTransaction();
         $sql = "DELETE FROM $table";
         $query = $db->prepare($sql);
@@ -88,7 +88,7 @@ class Db
 
     public function drop(string $table): void
     {
-        $db = self::initialize();
+        $db = $this->initialize();
         $db->beginTransaction();
         $sql = "DROP TABLE $table";
         $query = $db->prepare($sql);
