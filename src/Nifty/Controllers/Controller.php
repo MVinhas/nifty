@@ -9,18 +9,26 @@ class Controller
      * Know who called me, get the view path from that information
      * and also the filename to be called
      */
-    public function view(object $data = null): void
+
+    public function view(object $data = null, $path = null, $file = null): void
     {
-        include __DIR__.'/../../../resources/views/'.strtolower($this->path()).'/'.$this->file();
+        $path = $path ?? strtolower($this->path());
+        $file = $file ?? $this->file();
+        include $this->basepath().'/resources/views/'.$path.'/'.$file;
+    }
+
+    public function basepath(): string
+    {
+        return __DIR__.'/../../..';
     }
 
     private function path(): string
     {
-        $explode = explode(
+        $path_split = explode(
             '/',
             debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['file']
         );
-        return str_replace('Controller.php', '', end($explode));
+        return explode('Controller', end($path_split))[0];
     }
 
     private function file(): string
