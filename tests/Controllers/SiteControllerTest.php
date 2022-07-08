@@ -10,7 +10,9 @@ class SiteControllerTest extends TestCase
     //assert that menu exists
     public function testMenuExists()
     {
-        $data = (new Site())->getMenu();
+        $data = (object)[];
+        $data->menu = (new Site())->getMenu();
+
         $this->assertEquals((new Controller())->view($data, 'site', 'header.php'), (new SiteController())->header());
     }
 }
