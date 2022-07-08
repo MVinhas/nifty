@@ -20,11 +20,6 @@ class DbTest extends TestCase
         $this->assertNull($this->getConnection()->create('table', ['field1 INT NOT NULL', 'field2 VARCHAR(60)']));
     }
 
-    public function testSelect()
-    {
-        $this->assertIsObject($this->getConnection()->select(['1'], "users", ["1=1"]));
-    }
-
     public function testUpsert()
     {
         $this->assertNull($this->getConnection()->upsert('table', ['field1', 'field2'], [1, "2"]));

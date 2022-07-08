@@ -5,8 +5,9 @@ use PHPUnit\Framework\TestCase;
 
 class SiteTest extends TestCase
 {
-    public function testObjectIsRetrievedWhenGettingMenu()
+    private bool|object $menu;
+    public function setUp(): void
     {
-        $this->assertIsObject((new Site())->getMenu());
+        $this->menu = (new Site())->getMenu();
     }
 }

@@ -12,20 +12,16 @@ class Db
 {
     public function initialize(): PDO
     {
-        try {
-            return new PDO(
-                'mysql:host='.getenv('HOST').';dbname='.getenv('DBNAME'),
-                getenv('USERNAME'),
-                getenv('PASSWORD'),
-                [
-                    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
-                    PDO::ATTR_TIMEOUT => '5',
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-                ]
-            );
-        } catch (PDOException $e) {
-            throw DatabaseException::cannotConnect($e);
-        }
+        return new PDO(
+            'mysql:host='.getenv('HOST').';dbname='.getenv('DBNAME'),
+            getenv('USERNAME'),
+            getenv('PASSWORD'),
+            [
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
+                PDO::ATTR_TIMEOUT => '5',
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]
+        );
     }
 
     public function create(string $table, array $fields): void
@@ -45,7 +41,7 @@ class Db
         array $fields,
         string $table,
         array $where = []
-    ): object {
+    ): object|false {
         $db = $this->initialize();
         $db->beginTransaction();
         $sql = "SELECT ";
@@ -57,7 +53,11 @@ class Db
         $query = $db->prepare($sql);
         $db->commit();
         $query->execute();
-        return (object)$query->fetchAll(PDO::FETCH_OBJ);
+        $rows = (object)$query->fetchAll(PDO::FETCH_OBJ);
+        if (!$rows) {
+            return false;
+        }
+        return $rows;
     }
 
     public function upsert(

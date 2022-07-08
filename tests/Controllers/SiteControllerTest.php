@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class SiteControllerTest extends TestCase
 {
-    //assert that menu exists
     public function testMenuExists()
     {
         $data = (object)[];
