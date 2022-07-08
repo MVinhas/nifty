@@ -4,12 +4,6 @@ namespace Nifty\Controllers;
 
 class Controller
 {
-    /**
-     *
-     * Know who called me, get the view path from that information
-     * and also the filename to be called
-     */
-
     public function view(object $data = null, $path = null, $file = null): void
     {
         $path = $path ?? strtolower($this->path());
