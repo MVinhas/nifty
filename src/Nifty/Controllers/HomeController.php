@@ -8,6 +8,9 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return $this->view();
+        $data = (object)[];
+        $data->posts = (new Home())->getPosts();
+        $data->last_key = (string)array_key_last((array)$data->posts);
+        return $this->view($data);
     }
 }
