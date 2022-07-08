@@ -2,7 +2,10 @@
 
 namespace Nifty;
 
+use Exception;
 use Nifty\Controllers\SiteController;
+use Nifty\Exceptions\NiftyNotFoundException;
+use Prophecy\Exception\Doubler\ClassNotFoundException;
 
 class Route
 {
@@ -23,6 +26,8 @@ class Route
             $method = $uri->method;
             $params = $uri->params;
             $params ? (new $controller())->{$method}(...$params) : (new $controller())->{$method}();
+        } else {
+            (new NiftyNotFoundException())->throw404();
         }
     }
 
