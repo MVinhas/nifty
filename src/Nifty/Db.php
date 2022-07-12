@@ -10,6 +10,13 @@ use PDOException;
 
 class Db
 {
+    protected $db;
+
+    public function __construct()
+    {
+        $this->db = $this->initialize();
+    }
+
     public function initialize(): PDO
     {
         return new PDO(

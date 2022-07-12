@@ -4,16 +4,21 @@ namespace Nifty\Controllers;
 
 class Controller
 {
-    public function view(object $data = null, $path = null, $file = null): void
+    public function view(object $data = null, $path = null, $file = null): bool
     {
         $path = $path ?? strtolower($this->path());
         $file = $file ?? $this->file();
-        include $this->basepath().'/resources/views/'.$path.'/'.$file;
+        $fullPath = $this->basepath().'/resources/views/'.$path.'/'.$file;
+        if (!file_exists($fullPath)) {
+            return false;
+        }
+        include $fullPath;
+        return true;
     }
 
     public function basepath(): string
     {
-        return __DIR__.'/../../..';
+        return dirname(__DIR__.'/../../..', 6);
     }
 
     private function path(): string
