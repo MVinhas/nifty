@@ -34,9 +34,10 @@ class Route
     private function getURI(): object
     {
         $path_info = $_SERVER['PATH_INFO'] ?? '/';
+        $host = $_SERVER['HTTP_HOST'] ?? '';
         $url = explode(
             '/',
-            $_SERVER['HTTP_HOST'] ?? ''.$path_info
+            $host.$path_info
         );
 
         /**
