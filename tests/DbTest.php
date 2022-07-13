@@ -2,6 +2,7 @@
 
 namespace Nifty\Tests;
 
+use PDOException;
 use PHPUnit\Framework\TestCase;
 
 require_once 'config/env_loader.php';

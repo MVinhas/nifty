@@ -19,7 +19,8 @@ class SiteTest extends TestCase
 
     public function testGetMenu(): void
     {
-        $this->assertIsObject($this->site->method('getMenu'));
+        $this->home->method('getMenu')->willReturn((object)['1' => '1']);
+        $this->assertIsObject($this->home->getmenu());
     }
 
     public function testGetPostsFalseOnEmpty(): void

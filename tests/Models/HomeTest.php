@@ -19,7 +19,8 @@ class HomeTest extends TestCase
 
     public function testGetPosts(): void
     {
-        $this->assertIsObject($this->home->method('getPosts'));
+        $this->home->method('getPosts')->willReturn((object)['1' => '1']);
+        $this->assertIsObject($this->home->getPosts());
     }
 
     public function testGetPostsFalseOnEmpty(): void
