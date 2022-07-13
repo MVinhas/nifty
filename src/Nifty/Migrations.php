@@ -7,32 +7,41 @@ use Exception;
 
 class Migrations
 {
-    private static $tables = [
+    private $tables = [
         'menu',
         'user_roles',
         'users',
         'posts',
         'categories',
         'pages',
+        'page_types',
         'social_networks',
         'social_accounts'
     ];
 
-    public static function migrate(array $args = [])
+    protected Db $db;
+
+    public function __construct()
+    {
+        $this->db = new Db();
+    }
+
+    public function migrate(array $args = []): void
     {
         if (empty($args)) {
-            self::createTables();
+            $this->createTables();
         }
 
         foreach ($args ?? [] as $arg) {
-            self::{$arg}();
+            $this->{$arg}();
         }
     }
 
-    private static function menu()
+    private function menu(): void
     {
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`page_id` INT(11) NULL',
             '`name` VARCHAR(60) NOT NULL',
             '`admin` TINYINT(1) NOT NULL DEFAULT 0',
             '`creator` TINYINT(1) NOT NULL DEFAULT 0',
@@ -45,10 +54,10 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        (new Db())->create(__FUNCTION__, $fields);
+        $this->db->create(__FUNCTION__, $fields);
     }
 
-    private static function user_roles()
+    private function user_roles(): void
     {
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
@@ -58,10 +67,10 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        (new Db())->create(__FUNCTION__, $fields);
+        $this->db->create(__FUNCTION__, $fields);
     }
 
-    private static function users()
+    private function users(): void
     {
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
@@ -74,16 +83,17 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        (new Db())->create(__FUNCTION__, $fields);
+        $this->db->create(__FUNCTION__, $fields);
     }
 
-    private static function posts()
+    private function posts(): void
     {
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
             '`category_id` INT(11) NOT NULL',
             '`author_id` INT(11) NOT NULL',
             '`title` VARCHAR(255) NOT NULL',
+            '`slug` VARCHAR(255) NOT NULL',
             '`date` DATETIME',
             '`featured_image` VARCHAR(255)',
             '`excerpt` TEXT',
@@ -93,10 +103,10 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        (new Db())->create(__FUNCTION__, $fields);
+        $this->db->create(__FUNCTION__, $fields);
     }
 
-    private static function categories()
+    private function categories(): void
     {
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
@@ -105,23 +115,37 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        (new Db())->create(__FUNCTION__, $fields);
+        $this->db->create(__FUNCTION__, $fields);
     }
 
-    private static function pages()
+    private function page_types(): void
     {
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`name` VARCHAR(255) NOT NULL',
+            '`code` VARCHAR(255) NOT NULL'
+        ];
+        $this->db->create(__FUNCTION__, $fields);
+    }
+
+    private function pages(): void
+    {
+        $fields = [
+            '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`page_type_id` INT(11) NOT NULL DEFAULT 1',
+            '`main_page_id` INT(11) NOT NULL DEFAULT 0',
+            '`user_id` INT(11) NOT NULL',
             '`title` VARCHAR(255) NOT NULL',
+            '`slug` VARCHAR(255) NOT NULL',
             '`content` TEXT',
             '`status` TINYINT(1) NOT NULL DEFAULT 1',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        (new Db())->create(__FUNCTION__, $fields);
+        $this->db->create(__FUNCTION__, $fields);
     }
 
-    private static function social_networks()
+    private function social_networks(): void
     {
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
@@ -132,10 +156,10 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        (new Db())->create(__FUNCTION__, $fields);
+        $this->db->create(__FUNCTION__, $fields);
     }
 
-    private static function social_accounts()
+    private function social_accounts(): void
     {
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
@@ -146,10 +170,10 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
         ];
-        (new Db())->create(__FUNCTION__, $fields);
+        $this->db->create(__FUNCTION__, $fields);
     }
 
-    private static function populate_menu()
+    private function populate_menu(): void
     {
         $name = ['Home', 'About', 'Contact', 'Admin'];
         $admin = [0, 0, 0, 1];
@@ -170,11 +194,11 @@ class Migrations
                 ':creator' => $creator[$i],
                 ':logged_in' => $logged_in[$i]
             ];
-            (new Db())->upsert('menu', $fields, $values);
+            $this->db->upsert('menu', $fields, $values);
         }
     }
 
-    private static function populate_user_roles()
+    private function populate_user_roles(): void
     {
         $name = ['admin', 'creator', 'guest'];
         $admin = [1, 0, 0];
@@ -191,11 +215,11 @@ class Migrations
                 ':admin' => $admin[$i],
                 ':creator' => $creator[$i]
             ];
-            (new Db())->upsert('user_roles', $fields, $values);
+            $this->db->upsert('user_roles', $fields, $values);
         }
     }
 
-    private static function populate_users()
+    private function populate_users(): void
     {
         $email = [
             'admin@nifty.com',
@@ -230,11 +254,11 @@ class Migrations
                 ':role_id' => $role[$i],
                 ':registered_at' => $registered_at[$i]
             ];
-            (new Db())->upsert('users', $fields, $values);
+            $this->db->upsert('users', $fields, $values);
         }
     }
 
-    private static function populate_categories()
+    private function populate_categories(): void
     {
         $name = ['Technology', 'Lifestyle', 'Animals'];
         $size = count($name);
@@ -245,15 +269,73 @@ class Migrations
             $values = [
                 ':name' => $name[$i]
             ];
-            (new Db())->upsert('categories', $fields, $values);
+            $this->db->upsert('categories', $fields, $values);
         }
     }
 
-    private static function populate_pages()
+    private function populate_page_types(): void
     {
+        $name = [
+            'Generic',
+            'Generic Control Panel',
+            'Privacy Policy',
+            'About',
+            'Terms and Conditions',
+            'Legal',
+
+        ];
+        $code = [
+            'GENERIC',
+            'GENERIC_CONTROL_PANEL',
+            'PRIVACY_POLICY',
+            'ABOUT',
+            'TERMS_AND_CONDITIONS',
+            'LEGAL'
+        ];
+
+        $size = count($name);
+        for ($i = 0; $i < $size; $i++) {
+            $fields = [
+                'name = :name',
+                'code = :code'
+            ];
+            $values = [
+                ':name' => $name[$i],
+                ':code' => $code[$i]
+            ];
+            $this->db->upsert('page_types', $fields, $values);
+        }
     }
 
-    private static function populate_posts()
+    private function populate_pages(): void
+    {
+        $page_type_id = [4];
+        $user_id = [1];
+        $title = ['About Me'];
+        $slug = ['about-me'];
+        $content = ["A nice IT guy, that's all"];
+
+        $size = count($page_type_id);
+        for ($i = 0; $i < $size; $i++) {
+            $fields = [
+                'page_type_id = :page_type_id',
+                'user_id = :user_id',
+                'title = :title',
+                'slug = :slug',
+                'content = :content'
+            ];
+            $values = [
+                ':page_type_id' => $page_type_id[$i],
+                ':user_id' => $user_id[$i],
+                ':title' => $title[$i],
+                ':slug' => $slug[$i],
+                ':content' => $content[$i]
+            ];
+            $this->db->upsert('pages', $fields, $values);
+        }
+    }
+
+    private function populate_posts(): void
     {
         $category = [1, 2, 2, 3, 3, 3];
         $title = [
@@ -263,6 +345,14 @@ class Migrations
             'How to make your cat more social',
             '9 tips to improve your dog behavior',
             "Do people really like zoo's?"
+        ];
+        $slug = [
+            'apple-will-release-a-new-ios',
+            'are-you-sleeping-well-here-is-our-tips-to-sleep-better',
+            'a-clever-way-to-keep-your-inbox-clear',
+            'how-to-make-your-cat-more-social',
+            '9-tips-to-improve-your-dog-begavior',
+            'do-people-really-like-zoos'
         ];
         $author = [2,2,2,2,2,2];
         $date = [
@@ -307,6 +397,7 @@ class Migrations
                 'category_id = :category_id',
                 'author_id = :author_id',
                 'title = :title',
+                'slug = :slug',
                 'date = :date',
                 'excerpt = :excerpt',
                 'content = :content'
@@ -315,15 +406,16 @@ class Migrations
                 ':category_id' => $category[$i],
                 ':author_id' => $author[$i],
                 ':title' => $title[$i],
+                ':slug' => $slug[$i],
                 ':date' => $date[$i],
                 ':excerpt' => $excerpt[$i],
                 ':content' => $content[$i]
             ];
-            (new Db())->upsert('posts', $fields, $values);
+            $this->db->upsert('posts', $fields, $values);
         }
     }
 
-    private static function populate_social_networks()
+    private function populate_social_networks(): void
     {
         $name = [
             'Twitter',
@@ -358,11 +450,11 @@ class Migrations
                 ':name' => $name[$i],
                 ':domain' => $domain[$i]
             ];
-            (new Db())->upsert('social_networks', $fields, $values);
+            $this->db->upsert('social_networks', $fields, $values);
         }
     }
 
-    private static function populate_social_accounts()
+    private function populate_social_accounts(): void
     {
         $social = [1, 4];
         $username = ['nifty', 'nifty'];
@@ -376,40 +468,45 @@ class Migrations
                 ':social_id' => $social[$i],
                 ':username' => $username[$i]
             ];
-            (new Db())->upsert('social_accounts', $fields, $values);
+            $this->db->upsert('social_accounts', $fields, $values);
         }
     }
 
-    private static function createTables()
+    private function createTables(): void
     {
-        foreach (self::$tables as $table) {
-            self::{$table}();
+        foreach ($this->tables as $table) {
+            $this->{$table}();
         }
     }
 
-    private static function populate()
+    private function populate(): void
     {
-        self::createTables();
-        foreach (self::$tables as $table) {
+        $this->createTables();
+        foreach ($this->tables as $table) {
             $func = 'populate_'.$table;
-            if (method_exists(static::class, $func)) {
-                self::{$func}();
+            if (method_exists(__CLASS__, $func)) {
+                $this->{$func}();
             }
         }
     }
 
-    private static function cleanTables()
+    private function cleanTables(): void
     {
-        foreach (self::$tables as $table) {
-            (new Db())->clean($table);
+        foreach ($this->tables as $table) {
+            $this->db->clean($table);
         }
     }
 
-    private static function dropTables()
+    private function dropTables(): void
     {
-        self::cleanTables();
-        foreach (self::$tables as $table) {
-            (new Db())->drop($table);
+        $this->cleanTables();
+        foreach ($this->tables as $table) {
+            $this->db->drop($table);
         }
+    }
+
+    public function __destruct()
+    {
+        echo 'Job finished.'.PHP_EOL;
     }
 }
