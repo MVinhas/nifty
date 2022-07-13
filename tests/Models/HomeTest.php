@@ -2,14 +2,15 @@
 
 namespace Nifty\Tests\Models;
 
-
 use Nifty\Models\Home;
 use Nifty\Tests\Utility;
 use PHPUnit\Framework\TestCase;
 
 class HomeTest extends TestCase
 {
-    private $connection;
+    private object $connection;
+    private $home;
+
     protected function setUp(): void
     {
         $this->home = $this->createMock(Home::class);

@@ -9,7 +9,7 @@ use Prophecy\Exception\Doubler\ClassNotFoundException;
 
 class Route
 {
-    public function run()
+    public function run(): void
     {
         (new Db())->initialize();
         (new SiteController())->head();
@@ -18,7 +18,7 @@ class Route
         (new SiteController())->footer();
     }
 
-    private function contentToRender()
+    private function contentToRender(): void
     {
         $uri = $this->getURI();
         if (class_exists($uri->controller)) {
@@ -36,7 +36,7 @@ class Route
         $path_info = $_SERVER['PATH_INFO'] ?? '/';
         $url = explode(
             '/',
-            $_SERVER['HTTP_HOST'].$path_info
+            $_SERVER['HTTP_HOST'] ?? ''.$path_info
         );
 
         /**
