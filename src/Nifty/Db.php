@@ -48,7 +48,8 @@ class Db
         array $fields,
         string $table,
         array $where = []
-    ): object|false {
+    ): object|false
+    {
         $db = $this->initialize();
         $db->beginTransaction();
         $sql = "SELECT ";
@@ -59,7 +60,9 @@ class Db
         }
         $query = $db->prepare($sql);
         $db->commit();
-        $query->execute();
+        if (!$query->execute()) {
+            return false;
+        }
         $rows = (object)$query->fetchAll(PDO::FETCH_OBJ);
         if (!$rows) {
             return false;
@@ -87,19 +90,40 @@ class Db
     {
         $db = $this->initialize();
         $db->beginTransaction();
-        $sql = "DELETE FROM $table";
-        $query = $db->prepare($sql);
-        $db->commit();
-        $query->execute();
+        if ($this->tableExists($table)) {
+            $sql = "TRUNCATE TABLE $table";
+            $query = $db->prepare($sql);
+            $db->commit();
+            $query->execute();
+        }
     }
 
     public function drop(string $table): void
     {
         $db = $this->initialize();
         $db->beginTransaction();
-        $sql = "DROP TABLE $table";
-        $query = $db->prepare($sql);
-        $db->commit();
-        $query->execute();
+        if ($this->tableExists($table)) {
+            $sql = "DROP TABLE $table";
+            $query = $db->prepare($sql);
+            $db->commit();
+            $query->execute();
+        }
+    }
+
+    private function tableExists(string $table): bool
+    {
+        try {
+            $db = $this->initialize();
+            $db->beginTransaction();
+            $sql = "SELECT 1 FROM $table";
+            $query = $db->prepare($sql);
+            $db->commit();
+            if (!$query->execute()) {
+                return false;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+        return true;
     }
 }
