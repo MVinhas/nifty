@@ -29,7 +29,7 @@ class Route
         }
     }
 
-    private function getURI(): object
+    public function getURI(): object
     {
         $path_info = $_SERVER['PATH_INFO'] ?? '/';
         $host = $_SERVER['HTTP_HOST'] ?? '';
@@ -55,7 +55,7 @@ class Route
         }
 
         $controller = !empty($controllerArg) ?
-            '\Nifty\Controllers\\'.$controllerArg.'Controller' :
+            '\Nifty\Controllers\\'.ucfirst($controllerArg).'Controller' :
             '\Nifty\Controllers\HomeController';
 
         $method = !empty($methodArg) ? $methodArg : 'index';
@@ -64,6 +64,7 @@ class Route
 
         return (object)[
             'controller' => $controller,
+            'model' => ucfirst($controllerArg),
             'method' => $method,
             'params' => $params
         ];
