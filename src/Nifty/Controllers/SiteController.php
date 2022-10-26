@@ -22,6 +22,7 @@ class SiteController extends Controller
     {
         $data = (object)[];
         $data->menu = $this->site->getMenu();
+        $data->categories = $this->site->getCategories();
         if (!$this->isAdmin()) {
             return $this->view($data);
         }
