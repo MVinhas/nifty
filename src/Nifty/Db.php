@@ -50,7 +50,8 @@ class Db
         array $fields,
         string $table,
         array $where = [],
-        array $params = []
+        array $params = [],
+        string $extra = ''
     ): object|false
     {
         $db = $this->initialize();
@@ -60,6 +61,9 @@ class Db
         $sql.= ' FROM '.$table.'';
         if (!empty($where)) {
             $sql.= ' WHERE '.implode(' ', $where);
+        }
+        if (!empty($extra)) {
+            $sql.= ' '.$extra;
         }
         $query = $db->prepare($sql);
         foreach ($params as $key => $param) {

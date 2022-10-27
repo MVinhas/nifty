@@ -92,6 +92,7 @@ class Migrations
             '`title` VARCHAR(255) NOT NULL',
             '`slug` VARCHAR(255) NOT NULL',
             '`date` DATETIME',
+            '`featured` INT(1) NOT NULL DEFAULT 0',
             '`featured_image` VARCHAR(255)',
             '`excerpt` TEXT',
             '`content` TEXT',
