@@ -18,6 +18,7 @@ class HomeController extends Controller
         $data->last_key = (string)array_key_last((array)$data->posts);
         $data->main_post = $this->getMainPost();
         $data->other_featured_posts = $this->getOtherFeaturedPosts();
+        $data->about = $this->getAboutContent();
         return $this->view($data);
     }
 
@@ -29,5 +30,10 @@ class HomeController extends Controller
     public function getOtherFeaturedPosts()
     {
         return $this->home->getOtherFeaturedPosts();
+    }
+
+    public function getAboutContent()
+    {
+        return $this->home->getAboutContent();
     }
 }

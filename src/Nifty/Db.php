@@ -68,7 +68,7 @@ class Db
         $query = $db->prepare($sql);
         foreach ($params as $key => $param) {
             $field = substr($where[$key], strpos($where[$key], ':') + 1);
-            $query->bindParam(
+            $query->bindValue(
                 $field,
                 $param,
                 $param === (int)$param ? PDO::PARAM_INT : PDO::PARAM_STR

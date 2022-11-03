@@ -3,6 +3,7 @@
 namespace Nifty\Models;
 
 use Nifty\Db;
+use phpDocumentor\Reflection\PseudoTypes\False_;
 
 class Home
 {
@@ -39,5 +40,17 @@ class Home
             [1],
             'ORDER BY posts.featured DESC, posts.id DESC LIMIT 2 OFFSET 1'
         );
+    }
+
+    public function getAboutContent(): object|false
+    {
+        return $this->db
+        ->select(
+            ['pages.content as content'],
+            'pages LEFT JOIN page_types ON pages.page_type_id = page_types.id',
+            ['pages.status = :status', 'AND page_types.code = :code'],
+            [1, 'ABOUT'],
+            'ORDER BY pages.id DESC LIMIT 1'
+        )->{0};
     }
 }
