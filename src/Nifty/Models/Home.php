@@ -53,4 +53,16 @@ class Home
             'ORDER BY pages.id DESC LIMIT 1'
         )->{0};
     }
+
+    public function getSocialNetworks(): object|false
+    {
+        return $this->db
+        ->select(
+            ['CONCAT(social_networks.domain, social_accounts.username) as url, social_networks.name as name'],
+            'social_accounts LEFT JOIN social_networks ON social_accounts.social_id = social_networks.id',
+            ['social_accounts.status = :status', 'AND social_networks.status = :status'],
+            [1, 1]
+        );
+
+    }
 }

@@ -19,6 +19,7 @@ class HomeController extends Controller
         $data->main_post = $this->getMainPost();
         $data->other_featured_posts = $this->getOtherFeaturedPosts();
         $data->about = $this->getAboutContent();
+        $data->social_networks = $this->getSocialNetworks();
         return $this->view($data);
     }
 
@@ -35,5 +36,10 @@ class HomeController extends Controller
     public function getAboutContent()
     {
         return $this->home->getAboutContent();
+    }
+
+    public function getSocialNetworks()
+    {
+        return $this->home->getSocialNetworks();
     }
 }
