@@ -18,6 +18,7 @@ class HomeController extends Controller
         $data->last_key = (string)array_key_last((array)$data->posts);
         $data->main_post = $this->getMainPost();
         $data->other_featured_posts = $this->getOtherFeaturedPosts();
+        $data->normal_posts = $this->getNormalPosts();
         $data->about = $this->getAboutContent();
         $data->social_networks = $this->getSocialNetworks();
         return $this->view($data);
@@ -41,5 +42,10 @@ class HomeController extends Controller
     public function getSocialNetworks()
     {
         return $this->home->getSocialNetworks();
+    }
+
+    public function getNormalPosts(int $page_offset = 0)
+    {
+        return $this->home->getNormalPosts($page_offset);
     }
 }
