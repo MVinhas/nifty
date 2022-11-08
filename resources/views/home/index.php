@@ -34,19 +34,49 @@
             <h3 class="pb-4 mb-4 fst-italic border-bottom">
                 From the Firehose
             </h3>
+            <?php if (empty((array)$data->normal_posts)) :?>
+                <div class="alert alert-primary mb-4" role="alert">
+                No posts found.
+                </div>
+            <?php else :?>
             <?php foreach ($data->normal_posts as $key => $post) : ?>
-
             <article class="blog-post mb-5">
                 <h2 class="blog-post-title mb-1"><?= $post->title ?></h2>
                 <p class="blog-post-meta"><?= $post->date ?> by <a href="#"><?= $post->author ?></a></p>
-                <p class="card-text mb-auto"><?= mb_strimwidth($post->excerpt, 0, 90, '...'); ?></p>
+                <p class="card-text mb-auto"><?= $post->excerpt; ?></p>
                 <a href="/<?= $post->slug ?>" class="stretched-link">Continue reading</a>
             </article>
             <?php endforeach; ?>
+            <?php endif; ?>
 
             <nav class="blog-pagination" aria-label="Pagination">
-                <a class="btn btn-outline-primary rounded-pill" href="#">Older</a>
-                <a class="btn btn-outline-secondary rounded-pill disabled">Newer</a>
+                <a
+                    class="btn rounded-pill
+                    <?php if (empty((array)$data->normal_posts))
+                    echo ' btn-outline-secondary disabled';
+                    else
+                    echo ' btn-outline-primary';
+                    ?>
+                    "
+                    href="/?page=<?= $data->next_page ?>">Older</a>
+                <a
+                class="btn rounded-pill
+                <?php if (!isset($_GET['page']))
+                echo ' btn-outline-secondary disabled';
+                else
+                echo ' btn-outline-primary';
+                ?>
+                "
+                href="
+                <?php if (!isset($_GET['page']) || (int)$_GET['page'] === 1 || (int)$_GET['page'] === 0) {
+                    echo '/#';
+                } else {
+                    echo "/?page=".$data->previous_page;
+                }
+                ?>
+                ">
+                Newer
+            </a>
             </nav>
 
         </div>

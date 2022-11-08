@@ -13,15 +13,27 @@ class HomeController extends Controller
 
     public function index()
     {
-        $data = (object)[];
-        $data->posts = $this->home->getPosts();
+        $data = (object)[
+            'posts' => $this->home->getPosts(),
+            'main_post' => $this->getMainPost(),
+            'other_featured_posts' => $this->getOtherFeaturedPosts(),
+            'normal_posts' => $this->getNormalPosts($this->sanitizePage()),
+            'about' => $this->getAboutContent(),
+            'social_networks' => $this->getSocialNetworks(),
+            'previous_page' => $this->getPreviousPage(),
+            'next_page' => $this->getNextPage()
+        ];
         $data->last_key = (string)array_key_last((array)$data->posts);
-        $data->main_post = $this->getMainPost();
-        $data->other_featured_posts = $this->getOtherFeaturedPosts();
-        $data->normal_posts = $this->getNormalPosts();
-        $data->about = $this->getAboutContent();
-        $data->social_networks = $this->getSocialNetworks();
+
         return $this->view($data);
+    }
+
+    public function sanitizePage(): int
+    {
+        if (!isset($_GET['page'])) {
+            return 0;
+        }
+        return (int)$_GET['page'];
     }
 
     public function getMainPost()
@@ -47,5 +59,31 @@ class HomeController extends Controller
     public function getNormalPosts(int $page_offset = 0)
     {
         return $this->home->getNormalPosts($page_offset);
+    }
+
+    public function getPreviousPage(): int
+    {
+        if (
+            isset($_GET['page'])
+            &&
+            (int)$_GET['page'] == $_GET['page']
+            &&
+            (int)$_GET['page'] > 0
+        ){
+            return (int)$_GET['page'] - 1;
+        }
+        return 0;
+    }
+
+    public function getNextPage(): int
+    {
+        if (
+            isset($_GET['page'])
+            &&
+            (int)$_GET['page'] == $_GET['page']
+        ){
+            return (int)$_GET['page'] + 1;
+        }
+        return 1;
     }
 }
