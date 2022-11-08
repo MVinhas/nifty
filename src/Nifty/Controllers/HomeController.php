@@ -63,27 +63,11 @@ class HomeController extends Controller
 
     public function getPreviousPage(): int
     {
-        if (
-            isset($_GET['page'])
-            &&
-            (int)$_GET['page'] == $_GET['page']
-            &&
-            (int)$_GET['page'] > 0
-        ){
-            return (int)$_GET['page'] - 1;
-        }
-        return 0;
+        return $this->sanitizePage() - 1;
     }
 
     public function getNextPage(): int
     {
-        if (
-            isset($_GET['page'])
-            &&
-            (int)$_GET['page'] == $_GET['page']
-        ){
-            return (int)$_GET['page'] + 1;
-        }
-        return 1;
+        return $this->sanitizePage() + 1;
     }
 }

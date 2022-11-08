@@ -68,7 +68,16 @@
                 ?>
                 "
                 href="
-                <?php if (!isset($_GET['page']) || (int)$_GET['page'] === 1 || (int)$_GET['page'] === 0) {
+                <?php
+                if (
+                    !isset($_GET['page'])
+                    ||
+                    (int)$_GET['page'] === 1
+                    ||
+                    (int)$_GET['page'] === 0
+                    ||
+                    empty((array)$data->normal_posts)
+                ) {
                     echo '/#';
                 } else {
                     echo "/?page=".$data->previous_page;
