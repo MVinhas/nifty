@@ -21,7 +21,8 @@ class HomeController extends Controller
             'about' => $this->getAboutContent(),
             'social_networks' => $this->getSocialNetworks(),
             'previous_page' => $this->getPreviousPage(),
-            'next_page' => $this->getNextPage()
+            'next_page' => $this->getNextPage(),
+            'archive' => $this->getArchive()
         ];
         $data->last_key = (string)array_key_last((array)$data->posts);
 
@@ -69,5 +70,10 @@ class HomeController extends Controller
     public function getNextPage(): int
     {
         return $this->sanitizePage() + 1;
+    }
+
+    public function getArchive()
+    {
+        return $this->home->getArchive();
     }
 }

@@ -117,4 +117,22 @@ class Home
                 true
             );
     }
+
+    public function getArchive(): object|false
+    {
+        return $this->db
+        ->select(
+            [
+                'COUNT(*) AS total,
+                DATE_FORMAT(date, "%M %Y") AS date,
+                DATE_FORMAT(date, "%m") as month,
+                DATE_FORMAT(date, "%Y") as year'
+            ],
+            'posts',
+            ['status = :status'],
+            [1],
+            'GROUP BY DATE_FORMAT(date, "%M %Y"), DATE_FORMAT(date, "%m"), DATE_FORMAT(date, "%Y")
+            ORDER BY year, month ASC'
+        );
+    }
 }

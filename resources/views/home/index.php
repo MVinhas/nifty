@@ -3,7 +3,8 @@
         <div class="col-md-6 px-0">
             <h1 class="display-4 fst-italic"><?= $data->main_post->{0}->title ?></h1>
             <p class="lead my-3"><?= mb_strimwidth($data->main_post->{0}->excerpt, 0, 180, '...'); ?></p>
-            <p class="lead mb-0"><a href="/<?= $data->main_post->{0}->slug ?>" class="text-white fw-bold">Continue reading...</a></p>
+            <p class="lead mb-0"><a href="/<?= $data->main_post->{0}->slug ?>" class="text-white fw-bold">Continue
+                    reading...</a></p>
         </div>
     </div>
 
@@ -19,9 +20,12 @@
                     <a href="/<?= $post->slug ?>" class="stretched-link">Continue reading</a>
                 </div>
                 <div class="col-auto d-none d-lg-block">
-                    <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg"
+                        role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice"
+                        focusable="false">
                         <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                        <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
+                            dy=".3em">Thumbnail</text>
                     </svg>
                 </div>
             </div>
@@ -35,9 +39,9 @@
                 From the Firehose
             </h3>
             <?php if (empty((array)$data->normal_posts)) :?>
-                <div class="alert alert-primary mb-4" role="alert">
+            <div class="alert alert-primary mb-4" role="alert">
                 No posts found.
-                </div>
+            </div>
             <?php else :?>
             <?php foreach ($data->normal_posts as $key => $post) : ?>
             <article class="blog-post mb-5">
@@ -50,24 +54,20 @@
             <?php endif; ?>
 
             <nav class="blog-pagination" aria-label="Pagination">
-                <a
-                    class="btn rounded-pill
+                <a class="btn rounded-pill
                     <?php if (empty((array)$data->normal_posts))
                     echo ' btn-outline-secondary disabled';
                     else
                     echo ' btn-outline-primary';
                     ?>
-                    "
-                    href="/?page=<?= $data->next_page ?>">Older</a>
-                <a
-                class="btn rounded-pill
+                    " href="/?page=<?= $data->next_page ?>">Older</a>
+                <a class="btn rounded-pill
                 <?php if (!isset($_GET['page']))
                 echo ' btn-outline-secondary disabled';
                 else
                 echo ' btn-outline-primary';
                 ?>
-                "
-                href="
+                " href="
                 <?php
                 if (
                     !isset($_GET['page'])
@@ -84,8 +84,8 @@
                 }
                 ?>
                 ">
-                Newer
-            </a>
+                    Newer
+                </a>
             </nav>
 
         </div>
@@ -100,18 +100,9 @@
                 <div class="p-4">
                     <h4 class="fst-italic">Archives</h4>
                     <ol class="list-unstyled mb-0">
-                        <li><a href="#">March 2021</a></li>
-                        <li><a href="#">February 2021</a></li>
-                        <li><a href="#">January 2021</a></li>
-                        <li><a href="#">December 2020</a></li>
-                        <li><a href="#">November 2020</a></li>
-                        <li><a href="#">October 2020</a></li>
-                        <li><a href="#">September 2020</a></li>
-                        <li><a href="#">August 2020</a></li>
-                        <li><a href="#">July 2020</a></li>
-                        <li><a href="#">June 2020</a></li>
-                        <li><a href="#">May 2020</a></li>
-                        <li><a href="#">April 2020</a></li>
+                        <?php foreach ($data->archive as $date) : ?>
+                        <li><a href="/posts/<?=$date->year.'/'.$date->month?>"><?= $date->date ?></a><?= ' ('.$date->total.')'?></li>
+                        <?php endforeach; ?>
                     </ol>
                 </div>
 
@@ -119,7 +110,7 @@
                     <h4 class="fst-italic">Social Networks</h4>
                     <ol class="list-unstyled">
                         <?php foreach ($data->social_networks as $social) :?>
-                            <li><a href="<?= $social->url; ?>"><?= $social->name; ?></a></li>
+                        <li><a href="<?= $social->url; ?>"><?= $social->name; ?></a></li>
                         <?php endforeach; ?>
                     </ol>
                 </div>
