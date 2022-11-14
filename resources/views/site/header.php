@@ -6,7 +6,7 @@
                     <a class="link-secondary" href="#">Subscribe</a>
                 </div>
                 <div class="col-4 text-center">
-                    <a class="blog-header-logo text-dark" href="#"><?= getenv('SITENAME') ?></a>
+                    <a class="blog-header-logo text-dark" href="/"><?= getenv('SITENAME') ?></a>
                 </div>
                 <div class="col-4 d-flex justify-content-end align-items-center">
                     <a class="link-secondary" href="#" aria-label="Search">
@@ -16,7 +16,17 @@
                             <path d="M21 21l-5.2-5.2"></path>
                         </svg>
                     </a>
-                    <a class="btn btn-sm btn-outline-secondary" href="#">Sign up</a>
+                    <?php if (
+                        isset($_SESSION)
+                        &&
+                        isset($_SESSION['user']->username)
+                        &&
+                        is_string($_SESSION['user']->username)
+                    ) :?>
+                    <p>Welcome, <?= $_SESSION['user']->username; ?></p>
+                    <?php else :?>
+                        <a class="btn btn-sm btn-outline-secondary" href="Site/login">Sign up</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </header>

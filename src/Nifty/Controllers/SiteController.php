@@ -40,4 +40,20 @@ class SiteController extends Controller
         $currentModel = $this->route->getURI()->model;
         return $this->site->isAdmin(strtolower($currentModel));
     }
+
+    public function login(bool|null $errors = false)
+    {
+        return $this->view((object)['error' => $errors]);
+    }
+
+    public function doLogin()
+    {
+        if ($this->site->doLogin(
+            filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS)
+        )) {
+            return (new HomeController)->index();
+        } else {
+            return $this->login(true);
+        }
+    }
 }

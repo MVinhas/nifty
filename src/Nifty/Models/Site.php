@@ -31,4 +31,24 @@ class Site
         }
         return false;
     }
+
+    public function doLogin($post): bool
+    {
+        $exists =
+        (new Db())
+        ->select(
+            ['email, username, password'],
+            'users',
+            ['email = :email',' AND status = :status'],
+            [$post['email'], 1]
+        );
+        if (isset($exists->{0})) {
+            if (password_verify($post['password'], $exists->{0}->password)) {
+                unset($exists->{0}->password);
+                $_SESSION['user'] = $exists->{0};
+                return true;
+            }
+        }
+        return false;
+    }
 }

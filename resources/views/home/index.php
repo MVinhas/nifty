@@ -17,7 +17,7 @@
                     <h3 class="mb-0"><?= $post->title ?></h3>
                     <div class="mb-1 text-muted"><?= $post->date ?></div>
                     <p class="card-text mb-auto"><?= mb_strimwidth($post->excerpt, 0, 90, '...'); ?></p>
-                    <a href="/<?= $post->slug ?>" class="stretched-link">Continue reading</a>
+                    <a href="/<?= $post->slug ?>">Continue reading</a>
                 </div>
                 <div class="col-auto d-none d-lg-block">
                     <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@
                 <h2 class="blog-post-title mb-1"><?= $post->title ?></h2>
                 <p class="blog-post-meta"><?= $post->date ?> by <a href="#"><?= $post->author ?></a></p>
                 <p class="card-text mb-auto"><?= $post->excerpt; ?></p>
-                <a href="/<?= $post->slug ?>" class="stretched-link">Continue reading</a>
+                <a href="/<?= $post->slug ?>">Continue reading</a>
             </article>
             <?php endforeach; ?>
             <?php endif; ?>
