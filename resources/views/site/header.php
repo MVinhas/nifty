@@ -23,9 +23,11 @@
                         &&
                         is_string($_SESSION['user']->username)
                     ) :?>
-                    <p>Welcome, <?= $_SESSION['user']->username; ?></p>
+                    <span class="d-block">Welcome, <?= $_SESSION['user']->username; ?></span>
+                    &nbsp;
+                    <a href="/Admin" role="button">Admin</a>
                     <?php else :?>
-                        <a class="btn btn-sm btn-outline-secondary" href="Site/login">Sign up</a>
+                        <a class="btn btn-sm btn-outline-secondary " href="Site/login">Sign up</a>
                     <?php endif; ?>
                 </div>
             </div>
