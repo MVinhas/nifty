@@ -10,4 +10,12 @@ class AdminController extends Controller
     {
         return $this->view();
     }
+
+    public function signOut()
+    {
+        unset($_SESSION['user']);
+        session_write_close();
+        header('Location: /');
+        exit;
+    }
 }

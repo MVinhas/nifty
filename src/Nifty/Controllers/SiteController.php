@@ -51,7 +51,7 @@ class SiteController extends Controller
         if ($this->site->doLogin(
             filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS)
         )) {
-            header('Location: /Home');
+            header('Location: /');
             exit;
         } else {
             return $this->login(true);
