@@ -94,8 +94,9 @@
         </button>
         <input class="form-control form-control-dark w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
         <div class="navbar-nav">
-            <div class="nav-item text-nowrap">
+            <div class="nav-item text-nowrap d-flex">
                 <a class="nav-link px-3" href="Admin/signOut">Sign out</a>
+                <a class="nav-link px-3" href="/">Website</a>
             </div>
         </div>
     </header>
