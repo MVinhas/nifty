@@ -132,7 +132,7 @@ class Migrations
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
             '`page_type_id` INT(11) NOT NULL DEFAULT 1',
             '`main_page_id` INT(11) NOT NULL DEFAULT 0',
-            '`user_id` INT(11) NOT NULL',
+            '`user_id` INT(11) NULL',
             '`title` VARCHAR(255) NOT NULL',
             '`slug` VARCHAR(255) NOT NULL',
             '`content` TEXT',
@@ -162,7 +162,7 @@ class Migrations
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
             '`social_id` INT(11) NOT NULL',
-            '`user_id` INT(11) NOT NULL',
+            '`user_id` INT(11) NULL',
             '`username` VARCHAR(255) NOT NULL',
             '`status` TINYINT(1) NOT NULL DEFAULT 1',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
@@ -456,15 +456,18 @@ class Migrations
     {
         $social = [1, 4];
         $username = ['nifty', 'nifty'];
+        $user_id = [1, 1];
         $size = count($social);
         for ($i = 0; $i < $size; $i++) {
             $fields = [
                 'social_id = :social_id',
-                'username = :username'
+                'username = :username',
+                'user_id = :user_id'
             ];
             $values = [
                 ':social_id' => $social[$i],
-                ':username' => $username[$i]
+                ':username' => $username[$i],
+                ':user_id' => $user_id[$i]
             ];
             $this->db->upsert('social_accounts', $fields, $values);
         }
