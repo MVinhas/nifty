@@ -19,14 +19,8 @@
                     <p class="card-text mb-auto"><?= mb_strimwidth($post->excerpt, 0, 90, '...'); ?></p>
                     <a href="/<?= $post->slug ?>">Continue reading</a>
                 </div>
-                <div class="col-auto d-none d-lg-block">
-                    <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg"
-                        role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice"
-                        focusable="false">
-                        <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                            dy=".3em">Thumbnail</text>
-                    </svg>
+                <div class="col-auto d-none d-lg-block p-4">
+                    <img src="https://via.placeholder.com/200x250.png"/></text>
                 </div>
             </div>
         </div>
@@ -36,7 +30,7 @@
     <div class="row g-5">
         <div class="col-md-8">
             <h3 class="pb-4 mb-4 fst-italic border-bottom">
-                From the Firehose
+                Latest Articles
             </h3>
             <?php if (empty((array)$data->normal_posts)) :?>
             <div class="alert alert-primary mb-4" role="alert">
