@@ -7,6 +7,31 @@ use Nifty\Utils;
 
 class Site
 {
+    protected $db;
+    public function __construct()
+    {
+        $this->db = new Db;
+        $this->visitCounter();
+    }
+
+    public function visitCounter(): void
+    {
+        $userAlreadyVisited = $this->db->select(
+            ['id'],
+            'sessions',
+            ['session = :session'],
+            [session_id()]
+        );
+
+        if (empty((array)$userAlreadyVisited)) {
+            $this->db->upsert(
+                'sessions',
+                ['session = :session', 'firstvisit = :firstvisit'],
+                ['session' => session_id(), 'firstvisit' => date('Y-m-d H:i:s')]
+            );
+        }
+    }
+
     public function getMenu(): object|false
     {
         return (new Db())->select(['*'], 'menu', ['status = :status'], [1]);
