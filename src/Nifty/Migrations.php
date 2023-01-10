@@ -13,7 +13,8 @@ class Migrations
         'pages',
         'page_types',
         'social_networks',
-        'social_accounts'
+        'social_accounts',
+        'sessions'
     ];
 
     protected Db $db;
@@ -167,6 +168,16 @@ class Migrations
             '`status` TINYINT(1) NOT NULL DEFAULT 1',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+        ];
+        $this->db->create(__FUNCTION__, $fields);
+    }
+
+    private function sessions(): void
+    {
+        $fields = [
+            '`id` BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`session` VARCHAR(32) NOT NULL',
+            '`firstvisit` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
         $this->db->create(__FUNCTION__, $fields);
     }
