@@ -34,12 +34,12 @@ class Site
 
     public function getMenu(): object|false
     {
-        return (new Db())->select(['*'], 'menu', ['status = :status'], [1]);
+        return $this->db->select(['*'], 'menu', ['status = :status'], [1]);
     }
 
     public function getCategories(): object|false
     {
-        $categories = (new Db())->select(['*'], 'categories', ['status = :status'], [1]);
+        $categories = $this->db->select(['*'], 'categories', ['status = :status'], [1]);
         if ($categories) {
             foreach ($categories as $k => &$v) {
                 $v->slug = (new Utils())->slugify($v->name);
@@ -50,7 +50,7 @@ class Site
 
     public function isAdmin(string $model): bool
     {
-        $exists = (new Db())->select(['id'], 'pages', ['slug = :slug'], [$model]);
+        $exists = $this->db->select(['id'], 'pages', ['slug = :slug'], [$model]);
         if (isset($exists->{0}) && is_int($exists->{0}->id)) {
             return true;
         }
@@ -60,7 +60,7 @@ class Site
     public function doLogin($post): bool
     {
         $exists =
-        (new Db())
+        $this->db
         ->select(
             ['email, username, password'],
             'users',
