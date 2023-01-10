@@ -7,6 +7,9 @@ use Nifty\Route;
 
 class SiteController extends Controller
 {
+    protected $site;
+    protected $route;
+
     public function __construct()
     {
         $this->site = new Site();

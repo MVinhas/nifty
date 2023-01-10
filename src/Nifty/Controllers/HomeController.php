@@ -6,6 +6,8 @@ use Nifty\Models\Home;
 
 class HomeController extends Controller
 {
+    protected $home;
+
     public function __construct()
     {
         $this->home = new Home();
