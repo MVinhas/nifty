@@ -89,7 +89,8 @@ class Db
         string $table,
         array $fields,
         array $params
-    ): void {
+    ): bool
+    {
         $db = $this->initialize();
         $db->beginTransaction();
         $sql = "INSERT INTO $table SET ";
@@ -98,7 +99,28 @@ class Db
         $sql .= implode(',', $fields);
         $query = $db->prepare($sql);
         $db->commit();
-        $query->execute($params);
+        if ($query->execute($params)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function delete(
+        string $table,
+        array $fields,
+        array $params
+    ): bool
+    {
+        $db = $this->initialize();
+        $db->beginTransaction();
+        $sql = "DELETE FROM $table WHERE ";
+        $sql .= implode(',', $fields);
+        $query = $db->prepare($sql);
+        $db->commit();
+        if ($query->execute($params)) {
+            return true;
+        }
+        return false;
     }
 
     public function clean(string $table): void
@@ -136,5 +158,10 @@ class Db
             return false;
         }
         return true;
+    }
+
+    public function single()
+    {
+
     }
 }

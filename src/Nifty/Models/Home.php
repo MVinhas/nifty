@@ -13,11 +13,6 @@ class Home
         $this->db = new Db();
     }
 
-    public function getPosts(): object|false
-    {
-        return $this->db->select(['*'], 'posts', ['status = :status'], [1]);
-    }
-
     public function getMainPost(): object|false
     {
         return $this->db

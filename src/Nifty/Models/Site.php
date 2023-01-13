@@ -76,4 +76,63 @@ class Site
         }
         return false;
     }
+
+    public function getPosts(): object|false
+    {
+        return $this->db->select(['*'], 'posts', ['status = :status'], [1]);
+    }
+
+    public function getPost(int $id): object|false
+    {
+        return $this->db->select(
+            ['*'],
+            'posts',
+            ['status = :status', 'AND id = :id'],
+            [1, $id]
+        )->{0} ?? false;
+    }
+
+    public function deletePost(array $keys, array $values): bool
+    {
+        if ($this->db->delete('posts', $keys, $values)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function upsertPost(array $_post_keys, array $_post_values)
+    {
+        if ($this->db->upsert('posts', $_post_keys, $_post_values)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getCategory(int $id): object|false
+    {
+        return $this->db->select(
+            ['*'],
+            'categories',
+            ['status = :status', 'AND id = :id'],
+            [1, $id]
+        )->{0} ?? false;
+    }
+
+    public function deleteCategory(array $keys, array $values): bool
+    {
+        if ($this->db->delete('categories', $keys, $values)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function upsertCategory(array $_post_keys, array $_post_values): bool
+    {
+        if ($this->db->upsert('categories', $_post_keys, $_post_values)) {
+            return true;
+        }
+        return false;
+    }
+
+
 }

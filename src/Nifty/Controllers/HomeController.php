@@ -3,6 +3,7 @@
 namespace Nifty\Controllers;
 
 use Nifty\Models\Home;
+use Nifty\Models\Site;
 
 class HomeController extends Controller
 {
@@ -16,7 +17,7 @@ class HomeController extends Controller
     public function index()
     {
         $data = (object)[
-            'posts' => $this->home->getPosts(),
+            'posts' => (new Site())->getPosts(),
             'main_post' => $this->getMainPost(),
             'other_featured_posts' => $this->getOtherFeaturedPosts(),
             'normal_posts' => $this->getNormalPosts($this->sanitizePage()),

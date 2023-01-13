@@ -8,6 +8,12 @@ class Controller
     {
         $path = $path ?? strtolower($this->path());
         $file = $file ?? $this->file();
+        $file =
+            pathinfo($file, PATHINFO_EXTENSION) === 'php'
+            ?
+            $file
+            :
+            $file.'.php';
         $fullPath = $this->basepath().'/resources/views/'.$path.'/'.$file;
         if (!file_exists($fullPath)) {
             return false;
@@ -32,6 +38,9 @@ class Controller
 
     private function file(): string
     {
-        return debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3)[2]['function'].'.php';
+        return
+            debug_backtrace(
+                DEBUG_BACKTRACE_IGNORE_ARGS, 3
+            )[2]['function'].'.php';
     }
 }
