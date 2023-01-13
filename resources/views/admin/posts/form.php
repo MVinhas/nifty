@@ -1,5 +1,6 @@
 <form id="post_create" class="needs-validation" action="/posts/submit/<?= $data->post->id ?? null?>" method="POST"
     enctype="multipart/form-data">
+    <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
     <input type="hidden" name="id" id="id" value="<?= $data->post->id ?>">
     <div class="form-group">
         <label for="title">Title

@@ -3,6 +3,7 @@
         <h4 class="card-title mt-3 text-center">Create Account</h4>
         <p class="text-center">Get started with your free account</p>
         <form>
+            <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
             <div class="form-group input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fa fa-user"></i> </span>

@@ -5,6 +5,7 @@
   </div>
   <?php endif; ?>
   <form id="login" class="row g-3 needs-validation" action="/Site/doLogin" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
     <div class="form-group mb-2">
       <label for="exampleInputEmail1">Email address</label>
       <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"

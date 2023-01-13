@@ -4,16 +4,17 @@ namespace Nifty\Controllers;
 
 use Nifty\Models\Site;
 use Nifty\Route;
+use Nifty\Utils;
 
 class SiteController extends Controller
 {
-    protected $site;
-    protected $route;
+    protected $site, $route, $utils;
 
     public function __construct()
     {
         $this->site = new Site();
         $this->route = new Route();
+        $this->utils = new Utils();
     }
 
     public function head()
@@ -45,8 +46,14 @@ class SiteController extends Controller
 
     public function doLogin()
     {
+        $_post = $this->utils->_postSanitized();
+        if (!$_post['csrf'] || $_post['csrf'] !== $_SESSION['csrf']) {
+            header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+            exit;
+        }
+        unset($_post['csrf']);
         if ($this->site->doLogin(
-            filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS)
+            $_post
         )) {
             header('Location: /');
             exit;

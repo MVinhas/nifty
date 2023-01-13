@@ -8,4 +8,5 @@ include_once '../config/env_loader.php';
 include_once '../config/server.php';
 
 session_start();
+$_SESSION['csrf'] = $_SESSION['csrf'] ?: bin2hex(random_bytes(16));
 (new Route())->run();

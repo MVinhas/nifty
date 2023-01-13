@@ -3,6 +3,7 @@
     <div class="form-group">
         <label for="name">Name
         </label>
+        <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
         <input type="hidden" id="id" name="id" value="<?= $data->category->id ?? 0 ?>">
         <input type="text" class="form-control required" id="name" name="name" aria-describedby="nameHelp"
             placeholder="Name" value="<?= $data->category->name ?? ''?>" required>

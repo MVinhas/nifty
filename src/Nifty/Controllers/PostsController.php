@@ -79,9 +79,15 @@ class PostsController extends Controller
 
     public function submit()
     {
+        $_post = $this->utils->_postSanitized();
+        if (!$_post['csrf'] || $_post['csrf'] !== $_SESSION['csrf']) {
+            header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+            exit;
+        }
+        unset($_post['csrf']);
         if (!$this->post->upsert(
-            $this->utils->arrayKeysToQueryFields($this->utils->_postSanitized()),
-            $this->utils->arrayValuesToQueryParams($this->utils->_postSanitized())
+            $this->utils->arrayKeysToQueryFields($_post),
+            $this->utils->arrayValuesToQueryParams($_post)
         )) {
             return false;
         }
