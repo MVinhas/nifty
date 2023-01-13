@@ -31,4 +31,29 @@ class Utils
 
         return $text;
     }
+
+    public function arrayKeysToQueryFields(array|null $array)
+    {
+        $keys  = [];
+        foreach ($array as $key => $value) {
+            array_push($keys, "$key = :".$key);
+        }
+        return [implode(',', $keys)];
+
+    }
+
+    public function arrayValuesToQueryParams(array|null $array)
+    {
+        $values = [];
+        foreach ($array as $key => &$value) {
+            $value = [':'.$key => $value];
+            $values = array_merge($values, $value);
+        }
+        return $values;
+    }
+
+    public function _postSanitized()
+    {
+        return array_map('htmlspecialchars', $_POST);
+    }
 }

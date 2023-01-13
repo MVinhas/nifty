@@ -1,4 +1,4 @@
-<form id="category_create" class="needs-validation" action="/Admin/categories/submit/<?= $data->category->id ?? null?>"
+<form id="category_create" class="needs-validation" action="/categories/submit/<?= $data->category->id ?? null?>"
     method="POST" enctype="multipart/form-data">
     <div class="form-group">
         <label for="name">Name

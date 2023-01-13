@@ -2,19 +2,19 @@
     <div class="position-sticky pt-3 sidebar-sticky">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/Admin">
+                <a class="nav-link active" aria-current="page" href="/admin">
                     <span data-feather="home" class="align-text-bottom"></span>
                     Dashboard
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/Admin/posts">
+                <a class="nav-link" href="/posts">
                     <span data-feather="file" class="align-text-bottom"></span>
                     Posts
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/Admin/categories">
+                <a class="nav-link" href="/categories">
                     <span data-feather="shopping-cart" class="align-text-bottom"></span>
                     Categories
                 </a>

@@ -25,9 +25,9 @@
                     ) :?>
                     <span class="d-block">Welcome, <?= $_SESSION['user']->username; ?></span>
                     &nbsp;
-                    <a href="/Admin" role="button">Admin</a>
+                    <a href="/admin" role="button">Admin</a>
                     <?php else :?>
-                        <a class="btn btn-sm btn-outline-secondary " href="Site/login">Sign up</a>
+                        <a class="btn btn-sm btn-outline-secondary " href="/site/login">Sign up</a>
                     <?php endif; ?>
                 </div>
             </div>

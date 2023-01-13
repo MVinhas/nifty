@@ -26,22 +26,16 @@ class SiteController extends Controller
         $data = (object)[];
         $data->menu = $this->site->getMenu();
         $data->categories = $this->site->getCategories();
-        if (!$this->isAdmin()) {
+        if (!$this->site->isAdmin($this->route->getURI()->model)) {
             return $this->view($data);
         }
     }
 
     public function footer()
     {
-        if (!$this->isAdmin()) {
+        if (!$this->site->isAdmin($this->route->getURI()->model)) {
             return $this->view();
         }
-    }
-
-    private function isAdmin()
-    {
-        $currentModel = $this->route->getURI()->model;
-        return $this->site->isAdmin(strtolower($currentModel));
     }
 
     public function login(bool|null $errors = false)

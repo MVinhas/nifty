@@ -7,10 +7,11 @@ use Nifty\Utils;
 
 class Site
 {
-    protected $db;
+    protected $db, $utils;
     public function __construct()
     {
         $this->db = new Db;
+        $this->utils = new Utils();
         $this->visitCounter();
     }
 
@@ -50,8 +51,13 @@ class Site
 
     public function isAdmin(string $model): bool
     {
-        $exists = $this->db->select(['id'], 'pages', ['slug = :slug'], [$model]);
-        if (isset($exists->{0}) && is_int($exists->{0}->id)) {
+        $exists = $this->db->select(
+            ['page_types.code'],
+            'pages LEFT JOIN page_types ON pages.page_type_id = page_types.id',
+            ['pages.slug = :slug'],
+            [$this->utils->slugify($model)]
+        );
+        if (isset($exists->{0}) && $exists->{0}->code === 'GENERIC_CONTROL_PANEL') {
             return true;
         }
         return false;
@@ -81,58 +87,4 @@ class Site
     {
         return $this->db->select(['*'], 'posts', ['status = :status'], [1]);
     }
-
-    public function getPost(int $id): object|false
-    {
-        return $this->db->select(
-            ['*'],
-            'posts',
-            ['status = :status', 'AND id = :id'],
-            [1, $id]
-        )->{0} ?? false;
-    }
-
-    public function deletePost(array $keys, array $values): bool
-    {
-        if ($this->db->delete('posts', $keys, $values)) {
-            return true;
-        }
-        return false;
-    }
-
-    public function upsertPost(array $_post_keys, array $_post_values)
-    {
-        if ($this->db->upsert('posts', $_post_keys, $_post_values)) {
-            return true;
-        }
-        return false;
-    }
-
-    public function getCategory(int $id): object|false
-    {
-        return $this->db->select(
-            ['*'],
-            'categories',
-            ['status = :status', 'AND id = :id'],
-            [1, $id]
-        )->{0} ?? false;
-    }
-
-    public function deleteCategory(array $keys, array $values): bool
-    {
-        if ($this->db->delete('categories', $keys, $values)) {
-            return true;
-        }
-        return false;
-    }
-
-    public function upsertCategory(array $_post_keys, array $_post_values): bool
-    {
-        if ($this->db->upsert('categories', $_post_keys, $_post_values)) {
-            return true;
-        }
-        return false;
-    }
-
-
 }

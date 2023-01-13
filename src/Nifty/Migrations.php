@@ -318,11 +318,11 @@ class Migrations
 
     private function populate_pages(): void
     {
-        $page_type_id = [4, 2];
-        $user_id = [1, 1];
-        $title = ['About Me', 'Admin'];
-        $slug = ['about-me', 'admin'];
-        $content = ["A nice IT guy, that's all", ""];
+        $page_type_id = [4, 2, 2, 2];
+        $user_id = [1, 1, 1, 1];
+        $title = ['About Me', 'Admin', 'Posts', 'Categories'];
+        $slug = ['about-me', 'admin', 'posts', 'categories'];
+        $content = ["A nice IT guy, that's all", "", "", ""];
 
         $size = count($page_type_id);
         for ($i = 0; $i < $size; $i++) {

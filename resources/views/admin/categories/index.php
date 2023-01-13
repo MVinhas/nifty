@@ -17,7 +17,7 @@
                     <line x1="8" y1="12" x2="16" y2="12">
                     </line>
                 </svg>
-                <a href="/Admin/categories/new">New Category
+                <a href="/categories/new">New Category
                 </a>
             </button>
         </div>
@@ -44,7 +44,7 @@
                     <td data-label="title"><?= $category->name ?>
                     </td>
                     <td>
-                        <a type="button" href="/Admin/categories/edit/<?= $category->id ?>" class="btn btn-secondary">Edit
+                        <a type="button" href="/categories/edit/<?= $category->id ?>" class="btn btn-secondary">Edit
                         </a>
                     </td>
                     <td>
@@ -85,6 +85,6 @@ deleteModal.addEventListener('show.bs.modal', event => {
     const button = event.relatedTarget
     const id = button.getAttribute('data-bs-id')
     const modalTitle = deleteModal.querySelector('.delete')
-    modalTitle.href = `/Admin/categories/delete/${id}`
+    modalTitle.href = `/categories/delete/${id}`
 })
 </script>
