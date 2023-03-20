@@ -2,25 +2,15 @@
 
 namespace Nifty\Models;
 
-use Nifty\Db;
-
-class Admin
+class Admin extends Model
 {
-    protected $db;
     public function __construct()
     {
-        $this->db = new Db();
+        parent::__construct();
     }
 
-    public function getVisits() : object|false
+    public function getVisits(): object|false
     {
-        return $this->db
-        ->select(
-            ['firstvisit AS date'],
-            'sessions',
-            [],
-            [],
-            'GROUP BY firstvisit'
-        );
+        return $this->db->query("SELECT firstvisit AS date FROM sessions GROUP BY firstvisit");
     }
 }

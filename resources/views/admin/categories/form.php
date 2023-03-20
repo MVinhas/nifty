@@ -1,12 +1,12 @@
-<form id="category_create" class="needs-validation" action="/categories/submit/<?= $data->category->id ?? null?>"
-    method="POST" enctype="multipart/form-data">
+<form id="category_create" class="needs-validation" action="/categories/submit/<?= $data->category->id ?? null ?>"
+      method="POST" enctype="multipart/form-data">
     <div class="form-group">
         <label for="name">Name
         </label>
         <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
         <input type="hidden" id="id" name="id" value="<?= $data->category->id ?? 0 ?>">
         <input type="text" class="form-control required" id="name" name="name" aria-describedby="nameHelp"
-            placeholder="Name" value="<?= $data->category->name ?? ''?>" required>
+               placeholder="Name" value="<?= $data->category->name ?? '' ?>" required>
         <small id="nameHelp" class="form-text text-muted">Maximum 64 characters
         </small>
     </div>

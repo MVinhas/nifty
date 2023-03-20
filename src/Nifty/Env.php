@@ -1,11 +1,12 @@
 <?php
 
 namespace Nifty;
+
 use Nifty\Exceptions\EnvException;
 
 class Env
 {
-    protected $path;
+    protected string $path;
 
     public function __construct(string $path)
     {
@@ -26,7 +27,7 @@ class Env
             FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
         );
         foreach ($lines ?? array() as $line) {
-            if (strpos(trim($line), '#') === 0) {
+            if (str_starts_with(trim($line), '#')) {
                 continue;
             }
 

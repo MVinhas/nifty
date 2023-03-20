@@ -7,14 +7,14 @@ use Nifty\Models\Site;
 
 class HomeController extends Controller
 {
-    protected $home;
+    protected Home $home;
 
     public function __construct()
     {
         $this->home = new Home();
     }
 
-    public function index()
+    public function index(): bool
     {
         $data = (object)[
             'posts' => (new Site())->getPosts(),
@@ -40,27 +40,27 @@ class HomeController extends Controller
         return (int)$_GET['page'];
     }
 
-    public function getMainPost()
+    public function getMainPost(): object|bool
     {
         return $this->home->getMainPost();
     }
 
-    public function getOtherFeaturedPosts()
+    public function getOtherFeaturedPosts(): bool|array
     {
         return $this->home->getOtherFeaturedPosts();
     }
 
-    public function getAboutContent()
+    public function getAboutContent(): object|bool
     {
         return $this->home->getAboutContent();
     }
 
-    public function getSocialNetworks()
+    public function getSocialNetworks(): bool|array
     {
         return $this->home->getSocialNetworks();
     }
 
-    public function getNormalPosts(int $page_offset = 0)
+    public function getNormalPosts(int $page_offset = 0): bool|array
     {
         return $this->home->getNormalPosts($page_offset);
     }
@@ -75,7 +75,7 @@ class HomeController extends Controller
         return $this->sanitizePage() + 1;
     }
 
-    public function getArchive()
+    public function getArchive(): bool|array
     {
         return $this->home->getArchive();
     }

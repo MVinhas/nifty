@@ -7,7 +7,8 @@ use Nifty\Models\Site;
 
 class AdminController extends Controller
 {
-    protected $admin, $site;
+    protected Site $site;
+    protected Admin $admin;
 
     public function __construct()
     {
@@ -15,16 +16,18 @@ class AdminController extends Controller
         $this->site = new Site();
     }
 
-    public function index()
+    public function index(): bool
     {
         $visits = $this->admin->getVisits();
-        return $this->view((object)[
-            'sessions' => [
-                'today' => $this->visitsToday($visits),
-                'week' => $this->visitsThisWeek($visits),
-                'alltime' => count((array)$visits)
+        return $this->view(
+            (object)[
+                'sessions' => [
+                    'today' => $this->visitsToday($visits),
+                    'week' => $this->visitsThisWeek($visits),
+                    'alltime' => count((array)$visits)
+                ]
             ]
-        ]);
+        );
     }
 
     private function visitsToday(object $visits): int

@@ -8,7 +8,9 @@ use Nifty\Utils;
 
 class SiteController extends Controller
 {
-    protected $site, $route, $utils;
+    protected Utils $utils;
+    protected Route $route;
+    protected Site $site;
 
     public function __construct()
     {
@@ -17,12 +19,12 @@ class SiteController extends Controller
         $this->utils = new Utils();
     }
 
-    public function head()
+    public function head(): bool
     {
         return $this->view();
     }
 
-    public function header()
+    public function header(): bool
     {
         $data = (object)[];
         $data->menu = $this->site->getMenu();
@@ -30,6 +32,7 @@ class SiteController extends Controller
         if (!$this->site->isAdmin($this->route->getURI()->model)) {
             return $this->view($data);
         }
+        return false;
     }
 
     public function footer()
@@ -39,7 +42,7 @@ class SiteController extends Controller
         }
     }
 
-    public function login(bool|null $errors = false)
+    public function login(bool|null $errors = false): bool
     {
         return $this->view((object)['error' => $errors]);
     }

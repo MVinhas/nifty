@@ -10,11 +10,11 @@ class Controller
         $file = $file ?? $this->file();
         $file =
             pathinfo($file, PATHINFO_EXTENSION) === 'php'
-            ?
-            $file
-            :
-            $file.'.php';
-        $fullPath = $this->basepath().'/resources/views/'.$path.'/'.$file;
+                ?
+                $file
+                :
+                $file . '.php';
+        $fullPath = $this->basepath() . '/resources/views/' . $path . '/' . $file;
         if (!file_exists($fullPath)) {
             return false;
         }
@@ -24,7 +24,7 @@ class Controller
 
     public function basepath(): string
     {
-        return dirname(__DIR__.'/../../..', 6);
+        return dirname(__DIR__ . '/../../..', 6);
     }
 
     private function path(): string
@@ -40,7 +40,8 @@ class Controller
     {
         return
             debug_backtrace(
-                DEBUG_BACKTRACE_IGNORE_ARGS, 3
-            )[2]['function'].'.php';
+                DEBUG_BACKTRACE_IGNORE_ARGS,
+                3
+            )[2]['function'] . '.php';
     }
 }

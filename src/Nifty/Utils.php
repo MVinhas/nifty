@@ -1,11 +1,12 @@
 <?php
+
 namespace Nifty;
 
 use Nifty\Exceptions\NiftyNotFoundException;
 
 class Utils
 {
-    public static function slugify($text, string $divider = '-')
+    public static function slugify($text, string $divider = '-'): string
     {
         // replace non letter or digits by divider
         $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
@@ -32,27 +33,25 @@ class Utils
         return $text;
     }
 
-    public function arrayKeysToQueryFields(array|null $array)
+    public function arrayKeysToQueryFields(array|null $array): string
     {
-        $keys  = [];
+        $keys = [];
         foreach ($array as $key => $value) {
-            array_push($keys, "$key = :".$key);
+            array_push($keys, "$key = :" . $key);
         }
-        return [implode(',', $keys)];
-
+        return implode(',', $keys);
     }
 
-    public function arrayValuesToQueryParams(array|null $array)
+    public function arrayValuesToQueryParams(array|null $array): array
     {
         $values = [];
-        foreach ($array as $key => &$value) {
-            $value = [':'.$key => $value];
-            $values = array_merge($values, $value);
+        foreach ($array as $key => $value) {
+            $values[':' . $key] = $value;
         }
         return $values;
     }
 
-    public function _postSanitized()
+    public function _postSanitized(): array
     {
         return array_map('htmlspecialchars', $_POST);
     }

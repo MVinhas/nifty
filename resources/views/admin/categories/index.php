@@ -1,15 +1,18 @@
-<?php include '../resources/views/admin/header.php' ?>
-<?php include '../resources/views/admin/sidebar.php' ?>
+<?php
+
+include '../resources/views/admin/header.php' ?>
+<?php
+include '../resources/views/admin/sidebar.php' ?>
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div
-        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Categories
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <button type="button" class="btn btn-sm btn-outline-secondary">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="feather feather-plus-circle">
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="feather feather-plus-circle">
                     <circle cx="12" cy="12" r="10">
                     </circle>
                     <line x1="12" y1="8" x2="12" y2="16">
@@ -25,19 +28,20 @@
     <div class="table-responsive">
         <table class="table table-striped table-sm" id="table">
             <thead>
-                <tr>
-                    <th>#
-                    </th>
-                    <th>Title
-                    </th>
-                    <th>Actions
-                    </th>
-                    <th>
-                    </th>
-                </tr>
+            <tr>
+                <th>#
+                </th>
+                <th>Title
+                </th>
+                <th>Actions
+                </th>
+                <th>
+                </th>
+            </tr>
             </thead>
             <tbody>
-                <?php foreach ($data->categories as $category) : ?>
+            <?php
+            foreach ($data->categories as $category) : ?>
                 <tr>
                     <td><?= $category->id ?>
                     </td>
@@ -50,12 +54,13 @@
                     <td>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-id="<?= $category->id ?>" data-bs-target="#deleteModal">
+                                data-bs-id="<?= $category->id ?>" data-bs-target="#deleteModal">
                             Delete
                         </button>
                     </td>
                 </tr>
-                <?php endforeach; ?>
+            <?php
+            endforeach; ?>
             </tbody>
         </table>
         <!-- Modal -->
@@ -78,13 +83,14 @@
         </div>
     </div>
 </main>
-<?php include '../resources/views/admin/footer.php' ?>
+<?php
+include '../resources/views/admin/footer.php' ?>
 <script>
-const deleteModal = document.getElementById('deleteModal')
-deleteModal.addEventListener('show.bs.modal', event => {
-    const button = event.relatedTarget
-    const id = button.getAttribute('data-bs-id')
-    const modalTitle = deleteModal.querySelector('.delete')
-    modalTitle.href = `/categories/delete/${id}`
-})
+    const deleteModal = document.getElementById('deleteModal')
+    deleteModal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget
+        const id = button.getAttribute('data-bs-id')
+        const modalTitle = deleteModal.querySelector('.delete')
+        modalTitle.href = `/categories/delete/${id}`
+    })
 </script>

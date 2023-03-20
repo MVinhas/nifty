@@ -8,7 +8,9 @@ use Nifty\Utils;
 
 class CategoriesController extends Controller
 {
-    protected $category, $site, $utils;
+    protected Utils $utils;
+    protected Site $site;
+    protected Category $category;
 
     public function __construct()
     {
@@ -17,7 +19,7 @@ class CategoriesController extends Controller
         $this->utils = new Utils();
     }
 
-    public function index()
+    public function index(): bool
     {
         return $this->view(
             (object)[
@@ -28,7 +30,7 @@ class CategoriesController extends Controller
         );
     }
 
-    public function new()
+    public function new(): bool
     {
         return $this->view(
             null,
@@ -37,7 +39,7 @@ class CategoriesController extends Controller
         );
     }
 
-    public function edit(int $id)
+    public function edit(int $id): bool
     {
         if (
             (!isset($id) || !is_int($id) || $id < 1)
@@ -51,7 +53,7 @@ class CategoriesController extends Controller
         );
     }
 
-    public function delete(int $id)
+    public function delete(int $id): bool
     {
         if (
             (!isset($id) || !is_int($id) || $id < 1)
@@ -70,7 +72,7 @@ class CategoriesController extends Controller
         return $this->index();
     }
 
-    public function submit()
+    public function submit(): bool
     {
         $_post = $this->utils->_postSanitized();
         if (!$_post['csrf'] || $_post['csrf'] !== $_SESSION['csrf']) {

@@ -9,11 +9,11 @@ class Route
 {
     public function run(): void
     {
-        (new SiteController())->head();
-        (new Db())->initialize();
-        (new SiteController())->header();
+        $site = new SiteController();
+        $site->head();
+        $site->header();
         (new Route())->contentToRender();
-        (new SiteController())->footer();
+        $site->footer();
     }
 
     private function contentToRender(): void
@@ -35,7 +35,7 @@ class Route
         $host = $_SERVER['HTTP_HOST'] ?? '';
         $url = explode(
             '/',
-            $host.$path_info
+            $host . $path_info
         );
 
         /**
@@ -55,7 +55,7 @@ class Route
         }
 
         $controller = !empty($controllerArg) ?
-            '\Nifty\Controllers\\'.ucfirst($controllerArg).'Controller' :
+            '\Nifty\Controllers\\' . ucfirst($controllerArg) . 'Controller' :
             '\Nifty\Controllers\HomeController';
 
         $method = !empty($methodArg) ? $methodArg : 'index';

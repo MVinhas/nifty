@@ -7,6 +7,7 @@ use Nifty\Db;
 class Category
 {
     protected $db;
+
     public function __construct()
     {
         $this->db = new Db();
@@ -14,17 +15,15 @@ class Category
 
     public function get(int $id): object|false
     {
-        return $this->db->select(
-            ['*'],
-            'categories',
-            ['status = :status', 'AND id = :id'],
-            [1, $id]
-        )->{0} ?? false;
+        return $this->db->query(
+            "SELECT * FROM categories WHERE status = :status AND id = :id",
+            [':status' => 1, ':id' => $id]
+        )->fetch();
     }
 
     public function delete(array $keys, array $values): bool
     {
-        if ($this->db->delete('categories', $keys, $values)) {
+        if ($this->db->query("DELETE FROM categories WHERE $keys", $values)) {
             return true;
         }
         return false;
@@ -32,7 +31,10 @@ class Category
 
     public function upsert(array $_post_keys, array $_post_values): bool
     {
-        if ($this->db->upsert('categories', $_post_keys, $_post_values)) {
+        if ($this->db->query(
+            "INSERT INTO categories SET $_post_keys ON DUPLICATE KEY UPDATE $_post_keys",
+            $_post_values
+        )) {
             return true;
         }
         return false;

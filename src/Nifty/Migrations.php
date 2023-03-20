@@ -4,7 +4,7 @@ namespace Nifty;
 
 class Migrations
 {
-    private $tables = [
+    private array $tables = [
         'menu',
         'user_roles',
         'users',
@@ -21,7 +21,14 @@ class Migrations
 
     public function __construct()
     {
-        $this->db = new Db();
+        $this->db = new Db(
+            [
+                'host' => getenv('HOST'),
+                'dbname' => getenv('DBNAME'),
+                'port' => 3306,
+                'charset' => 'utf8mb4'
+            ]
+        );
     }
 
     public function migrate(array $args = []): void
@@ -52,7 +59,7 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        $this->db->create(__FUNCTION__, $fields);
+        $this->db->query("CREATE TABLE menu(" . implode(',', $fields) . ")");
     }
 
     private function user_roles(): void
@@ -65,7 +72,7 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        $this->db->create(__FUNCTION__, $fields);
+        $this->db->query("CREATE TABLE user_roles(" . implode(',', $fields) . ")");
     }
 
     private function users(): void
@@ -81,7 +88,7 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        $this->db->create(__FUNCTION__, $fields);
+        $this->db->query("CREATE TABLE users(" . implode(',', $fields) . ")");
     }
 
     private function posts(): void
@@ -102,7 +109,7 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        $this->db->create(__FUNCTION__, $fields);
+        $this->db->query("CREATE TABLE posts(" . implode(',', $fields) . ")");
     }
 
     private function categories(): void
@@ -114,7 +121,7 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        $this->db->create(__FUNCTION__, $fields);
+        $this->db->query("CREATE TABLE categories(" . implode(',', $fields) . ")");
     }
 
     private function page_types(): void
@@ -124,7 +131,7 @@ class Migrations
             '`name` VARCHAR(255) NOT NULL',
             '`code` VARCHAR(255) NOT NULL'
         ];
-        $this->db->create(__FUNCTION__, $fields);
+        $this->db->query("CREATE TABLE page_types(" . implode(',', $fields) . ")");
     }
 
     private function pages(): void
@@ -141,7 +148,7 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        $this->db->create(__FUNCTION__, $fields);
+        $this->db->query("CREATE TABLE pages(" . implode(',', $fields) . ")");
     }
 
     private function social_networks(): void
@@ -155,7 +162,7 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        $this->db->create(__FUNCTION__, $fields);
+        $this->db->query("CREATE TABLE social_networks(" . implode(',', $fields) . ")");
     }
 
     private function social_accounts(): void
@@ -169,7 +176,7 @@ class Migrations
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
         ];
-        $this->db->create(__FUNCTION__, $fields);
+        $this->db->query("CREATE TABLE social_accounts(" . implode(',', $fields) . ")");
     }
 
     private function sessions(): void
@@ -179,7 +186,7 @@ class Migrations
             '`session` VARCHAR(32) NOT NULL',
             '`firstvisit` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
-        $this->db->create(__FUNCTION__, $fields);
+        $this->db->query("CREATE TABLE sessions(" . implode(',', $fields) . ")");
     }
 
     private function populate_menu(): void
@@ -191,19 +198,19 @@ class Migrations
 
         $size = count($name);
         for ($i = 0; $i < $size; $i++) {
-            $fields = [
-                'name = :name',
-                'admin = :admin',
-                'creator = :creator',
-                'logged_in = :logged_in'
-            ];
-            $values = [
+            $params = [
                 ':name' => $name[$i],
                 ':admin' => $admin[$i],
                 ':creator' => $creator[$i],
                 ':logged_in' => $logged_in[$i]
             ];
-            $this->db->upsert('menu', $fields, $values);
+            $this->db->query(
+                "INSERT INTO menu('name', 'admin', 'creator', 'logged_in')
+                VALUES (:name, :admin, :creator, :logged_in) 
+                ON CONFLICT DO UPDATE 
+                SET name = :name, admin = :admin, creator = :creator, logged_in = :logged_in",
+                $params
+            );
         }
     }
 
@@ -214,17 +221,18 @@ class Migrations
         $creator = [1, 1, 0];
         $size = count($name);
         for ($i = 0; $i < $size; $i++) {
-            $fields = [
-                'name = :name',
-                'admin = :admin',
-                'creator = :creator'
-            ];
-            $values = [
+            $params = [
                 ':name' => $name[$i],
                 ':admin' => $admin[$i],
                 ':creator' => $creator[$i]
             ];
-            $this->db->upsert('user_roles', $fields, $values);
+            $this->db->query(
+                "INSERT INTO user_roles('name', 'admin', 'creator')
+                VALUES (:name, :admin, :creator) 
+                ON CONFLICT DO UPDATE 
+                SET name = :name, admin = :admin, creator = :creator",
+                $params
+            );
         }
     }
 
@@ -249,21 +257,20 @@ class Migrations
         ];
         $size = count($email);
         for ($i = 0; $i < $size; $i++) {
-            $fields = [
-                'email = :email',
-                'username = :username',
-                'password = :password',
-                'role_id = :role_id',
-                'registered_at = :registered_at'
-            ];
-            $values = [
+            $params = [
                 ':email' => $email[$i],
                 ':username' => $username[$i],
                 ':password' => $password[$i],
                 ':role_id' => $role[$i],
                 ':registered_at' => $registered_at[$i]
             ];
-            $this->db->upsert('users', $fields, $values);
+            $this->db->query(
+                "INSERT INTO users('email', 'username', 'password', 'role_id', 'registered_at')
+                VALUES (:email, :username, :password, :role_id, :registered_at) 
+                ON CONFLICT DO UPDATE 
+                SET email = :email, username = :username, password = :password, role_id = :role_id, registered_at = :registered_at",
+                $params
+            );
         }
     }
 
@@ -272,13 +279,16 @@ class Migrations
         $name = ['Technology', 'Lifestyle', 'Animals'];
         $size = count($name);
         for ($i = 0; $i < $size; $i++) {
-            $fields = [
-                'name = :name'
-            ];
-            $values = [
+            $params = [
                 ':name' => $name[$i]
             ];
-            $this->db->upsert('categories', $fields, $values);
+            $this->db->query(
+                "INSERT INTO categories('name')
+                VALUES (:name) 
+                ON CONFLICT DO UPDATE 
+                SET name = :name",
+                $params
+            );
         }
     }
 
@@ -304,15 +314,17 @@ class Migrations
 
         $size = count($name);
         for ($i = 0; $i < $size; $i++) {
-            $fields = [
-                'name = :name',
-                'code = :code'
-            ];
-            $values = [
+            $params = [
                 ':name' => $name[$i],
                 ':code' => $code[$i]
             ];
-            $this->db->upsert('page_types', $fields, $values);
+            $this->db->query(
+                "INSERT INTO page_types('name', 'code')
+                VALUES (:name, :code) 
+                ON CONFLICT DO UPDATE 
+                SET name = :name, code = :code",
+                $params
+            );
         }
     }
 
@@ -326,21 +338,20 @@ class Migrations
 
         $size = count($page_type_id);
         for ($i = 0; $i < $size; $i++) {
-            $fields = [
-                'page_type_id = :page_type_id',
-                'user_id = :user_id',
-                'title = :title',
-                'slug = :slug',
-                'content = :content'
-            ];
-            $values = [
+            $params = [
                 ':page_type_id' => $page_type_id[$i],
                 ':user_id' => $user_id[$i],
                 ':title' => $title[$i],
                 ':slug' => $slug[$i],
                 ':content' => $content[$i]
             ];
-            $this->db->upsert('pages', $fields, $values);
+            $this->db->query(
+                "INSERT INTO pages('page_type_id', 'user_id', 'title', 'slug', 'content')
+                VALUES (:page_type_id, :user_id, :title, :slug, :content) 
+                ON CONFLICT DO UPDATE 
+                SET page_type_id = :page_type_id, user_id = :user_id, title = :title, slug = :slug, content = :content",
+                $params
+            );
         }
     }
 
@@ -363,7 +374,7 @@ class Migrations
             '9-tips-to-improve-your-dog-begavior',
             'do-people-really-like-zoos'
         ];
-        $author = [2,2,2,2,2,2];
+        $author = [2, 2, 2, 2, 2, 2];
         $date = [
             '2020-11-23 14:15:19',
             '2020-11-30 17:10:56',
@@ -402,16 +413,7 @@ class Migrations
         ];
         $size = count($category);
         for ($i = 0; $i < $size; $i++) {
-            $fields = [
-                'category_id = :category_id',
-                'author_id = :author_id',
-                'title = :title',
-                'slug = :slug',
-                'date = :date',
-                'excerpt = :excerpt',
-                'content = :content'
-            ];
-            $values = [
+            $params = [
                 ':category_id' => $category[$i],
                 ':author_id' => $author[$i],
                 ':title' => $title[$i],
@@ -420,7 +422,13 @@ class Migrations
                 ':excerpt' => $excerpt[$i],
                 ':content' => $content[$i]
             ];
-            $this->db->upsert('posts', $fields, $values);
+            $this->db->query(
+                "INSERT INTO posts('category_id', 'author_id', 'title', 'slug', 'date', 'excerpt', 'content')
+                VALUES (:category_id, :author_id, :title, :slug, :date, :excerpt, :content) 
+                ON CONFLICT DO UPDATE 
+                SET category_id = :category_id, author_id = :author_id, title = :title, slug = :slug, date = :date, excerpt = :excerpt, content = :content",
+                $params
+            );
         }
     }
 
@@ -438,7 +446,7 @@ class Migrations
             'Pinterest'
         ];
 
-        $domain = [
+        $url = [
             'https://www.twitter.com/',
             'https://www.facebook.com/',
             'https://www.instagram.com/',
@@ -451,15 +459,17 @@ class Migrations
         ];
         $size = count($name);
         for ($i = 0; $i < $size; $i++) {
-            $fields = [
-                'name = :name',
-                'domain = :domain'
-            ];
-            $values = [
+            $params = [
                 ':name' => $name[$i],
-                ':domain' => $domain[$i]
+                ':url' => $url[$i]
             ];
-            $this->db->upsert('social_networks', $fields, $values);
+            $this->db->query(
+                "INSERT INTO social_networks('name', 'domain')
+                VALUES (:name, :domain) 
+                ON CONFLICT DO UPDATE 
+                SET name = :name, url = :url",
+                $params
+            );
         }
     }
 
@@ -470,17 +480,18 @@ class Migrations
         $user_id = [1, 1];
         $size = count($social);
         for ($i = 0; $i < $size; $i++) {
-            $fields = [
-                'social_id = :social_id',
-                'username = :username',
-                'user_id = :user_id'
-            ];
-            $values = [
+            $params = [
                 ':social_id' => $social[$i],
                 ':username' => $username[$i],
                 ':user_id' => $user_id[$i]
             ];
-            $this->db->upsert('social_accounts', $fields, $values);
+            $this->db->query(
+                "INSERT INTO social_accounts('social_id', 'username', 'user_id')
+                VALUES (:social_id, :username, :user_id) 
+                ON CONFLICT DO UPDATE 
+                SET social_id = :social_id, username = :username, user_id = :user_id",
+                $params
+            );
         }
     }
 
@@ -495,7 +506,7 @@ class Migrations
     {
         $this->createTables();
         foreach ($this->tables as $table) {
-            $func = 'populate_'.$table;
+            $func = 'populate_' . $table;
             if (method_exists(__CLASS__, $func)) {
                 $this->{$func}();
             }
@@ -505,7 +516,7 @@ class Migrations
     private function cleanTables(): void
     {
         foreach ($this->tables as $table) {
-            $this->db->clean($table);
+            $this->db->query("TRUNCATE TABLE $table");
         }
     }
 
@@ -513,12 +524,12 @@ class Migrations
     {
         $this->cleanTables();
         foreach ($this->tables as $table) {
-            $this->db->drop($table);
+            $this->db->query("DROP TABLE $table");
         }
     }
 
     public function __destruct()
     {
-        echo 'Job finished.'.PHP_EOL;
+        echo 'Job finished.' . PHP_EOL;
     }
 }

@@ -8,7 +8,9 @@ use Nifty\Utils;
 
 class PostsController extends Controller
 {
-    protected $post, $site, $utils;
+    protected Utils $utils;
+    protected Site $site;
+    protected Post $post;
 
     public function __construct()
     {
@@ -17,7 +19,7 @@ class PostsController extends Controller
         $this->utils = new Utils();
     }
 
-    public function index()
+    public function index(): bool
     {
         return $this->view(
             (object)[
@@ -28,7 +30,7 @@ class PostsController extends Controller
         );
     }
 
-    public function new()
+    public function new(): bool
     {
         return $this->view(
             (object)[
@@ -39,7 +41,7 @@ class PostsController extends Controller
         );
     }
 
-    public function edit(int $id)
+    public function edit(int $id): bool
     {
         if (
             (!isset($id) || !is_int($id) || $id < 1)
@@ -57,10 +59,10 @@ class PostsController extends Controller
         );
     }
 
-    public function delete(int $id)
+    public function delete(int $id): bool
     {
         if (
-            (!isset($id) || !is_int($id) || $id < 1)
+            (!isset($id) || $id < 1)
         ) {
             return false;
         }
