@@ -2,3 +2,4 @@ config/.env
 composer.lock
 vendor/
 .idea/
+.gitignore

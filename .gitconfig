@@ -1,0 +1,11 @@
+#Now, edit .gitconfig on your $HOME directory
+[alias]
+    lg = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr %an)%Creset' --abbrev-commit --date=relative
+    ci = commit
+    co = checkout
+    st = status
+[push]
+    default = simple
+[user]
+	email = dev.mvinhas@gmail.com
+	name = Micael Vinhas
