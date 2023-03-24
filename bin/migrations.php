@@ -13,4 +13,4 @@ if (isset($argc)) {
         }
     }
 }
-(new \Nifty\Migrations)->migrate($args);
+(new \Nifty\Migrations())->migrate($args);

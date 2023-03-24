@@ -2,8 +2,6 @@
 
 namespace Nifty\Models;
 
-use phpDocumentor\Reflection\PseudoTypes\False_;
-
 class Home extends Model
 {
     public function __construct()

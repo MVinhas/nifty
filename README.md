@@ -1,2 +1,3 @@
 # nifty
-PHP CMS (2022 Edition)
+PHP CMS made from scratch\
+(work in progress)

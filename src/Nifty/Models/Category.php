@@ -2,15 +2,11 @@
 
 namespace Nifty\Models;
 
-use Nifty\Db;
-
 class Category
 {
-    protected $db;
-
     public function __construct()
     {
-        $this->db = new Db();
+        parent::__construct();
     }
 
     public function get(int $id): object|false

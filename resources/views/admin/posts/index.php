@@ -1,4 +1,5 @@
 <?php
+
 include '../resources/views/admin/header.php' ?>
 <?php
 include '../resources/views/admin/sidebar.php' ?>

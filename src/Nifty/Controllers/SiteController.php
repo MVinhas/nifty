@@ -8,7 +8,6 @@ use Nifty\Utils;
 
 class SiteController extends Controller
 {
-    protected Utils $utils;
     protected Route $route;
     protected Site $site;
 
@@ -16,7 +15,6 @@ class SiteController extends Controller
     {
         $this->site = new Site();
         $this->route = new Route();
-        $this->utils = new Utils();
     }
 
     public function head(): bool

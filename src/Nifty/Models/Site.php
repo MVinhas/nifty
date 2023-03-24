@@ -6,12 +6,10 @@ use Nifty\Utils;
 
 class Site extends Model
 {
-    protected $utils;
 
     public function __construct()
     {
         parent::__construct();
-        $this->utils = new Utils();
         $this->visitCounter();
     }
 
@@ -40,7 +38,7 @@ class Site extends Model
         $categories = $this->db->query("SELECT * FROM categories WHERE status = :status", [':status' => 1])->fetchAll();
         if ($categories) {
             foreach ($categories as $k => &$v) {
-                $v->slug = $this->utils->slugify($v->name);
+                $v->slug = slugify($v->name);
             }
         }
         return $categories;
@@ -52,7 +50,7 @@ class Site extends Model
             "SELECT page_types.code FROM pages
             LEFT JOIN page_types ON pages.page_type_id = page_types.id 
             WHERE pages.slug = :slug",
-            [':slug' => $this->utils->slugify($model)]
+            [':slug' => slugify($model)]
         )->fetch();
         if (is_object($exists) && $exists->code === 'GENERIC_CONTROL_PANEL') {
             return true;

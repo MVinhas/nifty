@@ -44,8 +44,17 @@ class Db
         $this->connection->beginTransaction();
         $query = $this->connection->prepare($sql);
         $this->connection->commit();
+        $msc = microtime(true);
         if (!$query->execute($params)) {
             $this->connection->rollBack();
+        }
+        $msc = round((microtime(true) - $msc) * 1000, 3);
+        if (getenv('ENVIRONMENT') === 'dev') {
+            log_to_file(
+                "($msc ms)\t$sql\nCaller: " . debug_backtrace()[1]['class'] . "\\" . debug_backtrace(
+                )[1]['function'] . "\n\n",
+                '.querylog'
+            );
         }
         return $query;
     }
