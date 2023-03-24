@@ -19,17 +19,6 @@ class CategoriesController extends Controller
         $this->utils = new Utils();
     }
 
-    public function index(): bool
-    {
-        return $this->view(
-            (object)[
-                'categories' => $this->site->getCategories()
-            ],
-            'admin/categories',
-            'index'
-        );
-    }
-
     public function new(): bool
     {
         return $this->view(
@@ -70,6 +59,17 @@ class CategoriesController extends Controller
             return false;
         }
         return $this->index();
+    }
+
+    public function index(): bool
+    {
+        return $this->view(
+            (object)[
+                'categories' => $this->site->getCategories()
+            ],
+            'admin/categories',
+            'index'
+        );
     }
 
     public function submit(): bool

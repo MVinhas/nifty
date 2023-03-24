@@ -22,11 +22,6 @@ class Controller
         return true;
     }
 
-    public function basepath(): string
-    {
-        return dirname(__DIR__ . '/../../..', 6);
-    }
-
     private function path(): string
     {
         $path_split = explode(
@@ -43,5 +38,10 @@ class Controller
                 DEBUG_BACKTRACE_IGNORE_ARGS,
                 3
             )[2]['function'] . '.php';
+    }
+
+    public function basepath(): string
+    {
+        return dirname(__DIR__ . '/../../..', 6);
     }
 }

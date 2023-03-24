@@ -4,6 +4,7 @@ namespace Nifty;
 
 class Migrations
 {
+    protected Db $db;
     private array $tables = [
         'menu',
         'user_roles',
@@ -16,8 +17,6 @@ class Migrations
         'social_accounts',
         'sessions'
     ];
-
-    protected Db $db;
 
     public function __construct()
     {
@@ -40,6 +39,18 @@ class Migrations
         foreach ($args ?? [] as $arg) {
             $this->{$arg}();
         }
+    }
+
+    private function createTables(): void
+    {
+        foreach ($this->tables as $table) {
+            $this->{$table}();
+        }
+    }
+
+    public function __destruct()
+    {
+        echo 'Job finished.' . PHP_EOL;
     }
 
     private function menu(): void
@@ -495,13 +506,6 @@ class Migrations
         }
     }
 
-    private function createTables(): void
-    {
-        foreach ($this->tables as $table) {
-            $this->{$table}();
-        }
-    }
-
     private function populate(): void
     {
         $this->createTables();
@@ -513,13 +517,6 @@ class Migrations
         }
     }
 
-    private function cleanTables(): void
-    {
-        foreach ($this->tables as $table) {
-            $this->db->query("TRUNCATE TABLE $table");
-        }
-    }
-
     private function dropTables(): void
     {
         $this->cleanTables();
@@ -528,8 +525,10 @@ class Migrations
         }
     }
 
-    public function __destruct()
+    private function cleanTables(): void
     {
-        echo 'Job finished.' . PHP_EOL;
+        foreach ($this->tables as $table) {
+            $this->db->query("TRUNCATE TABLE $table");
+        }
     }
 }

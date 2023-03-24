@@ -19,17 +19,6 @@ class PostsController extends Controller
         $this->utils = new Utils();
     }
 
-    public function index(): bool
-    {
-        return $this->view(
-            (object)[
-                'posts' => $this->site->getPosts()
-            ],
-            'admin/posts',
-            'index'
-        );
-    }
-
     public function new(): bool
     {
         return $this->view(
@@ -77,6 +66,17 @@ class PostsController extends Controller
             return false;
         }
         return $this->index();
+    }
+
+    public function index(): bool
+    {
+        return $this->view(
+            (object)[
+                'posts' => $this->site->getPosts()
+            ],
+            'admin/posts',
+            'index'
+        );
     }
 
     public function submit()

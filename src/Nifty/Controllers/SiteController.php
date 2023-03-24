@@ -40,11 +40,6 @@ class SiteController extends Controller
         }
     }
 
-    public function login(bool|null $errors = false): bool
-    {
-        return $this->view((object)['error' => $errors]);
-    }
-
     public function doLogin()
     {
         $_post = $this->utils->_postSanitized();
@@ -61,5 +56,10 @@ class SiteController extends Controller
         } else {
             return $this->login(true);
         }
+    }
+
+    public function login(bool|null $errors = false): bool
+    {
+        return $this->view((object)['error' => $errors]);
     }
 }

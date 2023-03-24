@@ -9,26 +9,6 @@ class Home extends Model
         parent::__construct();
     }
 
-    public function getMainPost(): object|false
-    {
-        return $this->db->query(
-            "SELECT * FROM posts WHERE status = :status ORDER BY featured DESC, id DESC LIMIT 1",
-            [':status' => 1]
-        )->fetch();
-    }
-
-    public function getOtherFeaturedPosts(): array|false
-    {
-        return $this->db->query(
-            "SELECT posts.id, categories.name as category_name, posts.title, posts.slug, posts.date, posts.excerpt 
-            FROM posts 
-            LEFT JOIN categories ON posts.category_id = categories.id AND posts.status = :status 
-            ORDER BY posts.featured DESC, posts.id DESC 
-            LIMIT 2 OFFSET 1",
-            [':status' => 1]
-        )->fetchAll();
-    }
-
     public function getAboutContent(): object|false
     {
         return $this->db->query(
@@ -91,6 +71,26 @@ class Home extends Model
                 getenv('POSTS_PER_PAGE'),
                 true
             );
+    }
+
+    public function getOtherFeaturedPosts(): array|false
+    {
+        return $this->db->query(
+            "SELECT posts.id, categories.name as category_name, posts.title, posts.slug, posts.date, posts.excerpt 
+            FROM posts 
+            LEFT JOIN categories ON posts.category_id = categories.id AND posts.status = :status 
+            ORDER BY posts.featured DESC, posts.id DESC 
+            LIMIT 2 OFFSET 1",
+            [':status' => 1]
+        )->fetchAll();
+    }
+
+    public function getMainPost(): object|false
+    {
+        return $this->db->query(
+            "SELECT * FROM posts WHERE status = :status ORDER BY featured DESC, id DESC LIMIT 1",
+            [':status' => 1]
+        )->fetch();
     }
 
     public function getArchive(): array|false

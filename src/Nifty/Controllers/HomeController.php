@@ -32,14 +32,6 @@ class HomeController extends Controller
         return $this->view($data);
     }
 
-    public function sanitizePage(): int
-    {
-        if (!isset($_GET['page'])) {
-            return 0;
-        }
-        return (int)$_GET['page'];
-    }
-
     public function getMainPost(): object|bool
     {
         return $this->home->getMainPost();
@@ -50,6 +42,19 @@ class HomeController extends Controller
         return $this->home->getOtherFeaturedPosts();
     }
 
+    public function getNormalPosts(int $page_offset = 0): bool|array
+    {
+        return $this->home->getNormalPosts($page_offset);
+    }
+
+    public function sanitizePage(): int
+    {
+        if (!isset($_GET['page'])) {
+            return 0;
+        }
+        return (int)$_GET['page'];
+    }
+
     public function getAboutContent(): object|bool
     {
         return $this->home->getAboutContent();
@@ -58,11 +63,6 @@ class HomeController extends Controller
     public function getSocialNetworks(): bool|array
     {
         return $this->home->getSocialNetworks();
-    }
-
-    public function getNormalPosts(int $page_offset = 0): bool|array
-    {
-        return $this->home->getNormalPosts($page_offset);
     }
 
     public function getPreviousPage(): int
