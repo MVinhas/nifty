@@ -19,7 +19,7 @@ class Site extends Model
             "SELECT id FROM sessions where session = :session", [':session' => session_id()]
         )->fetch();
 
-        if (empty((array)$userAlreadyVisited)) {
+        if (!(array)$userAlreadyVisited) {
             $this->db->upsert(
                 'sessions',
                 ['session = :session', 'firstvisit = :firstvisit'],

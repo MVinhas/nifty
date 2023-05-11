@@ -35,7 +35,7 @@
                 Latest Articles
             </h3>
             <?php
-            if (empty((array)$data->normal_posts)) : ?>
+            if ((array)$data->normal_posts === []) : ?>
                 <div class="alert alert-primary mb-4" role="alert">
                     No posts found.
                 </div>
@@ -57,7 +57,7 @@
             <nav class="blog-pagination" aria-label="Pagination">
                 <a class="btn rounded-pill
                     <?php
-                if (empty((array)$data->normal_posts)) {
+                if ((array)$data->normal_posts === []) {
                     echo ' btn-outline-secondary disabled';
                 } else {
                     echo ' btn-outline-primary';

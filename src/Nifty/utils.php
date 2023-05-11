@@ -1,6 +1,6 @@
 <?php
 
-function slugify($text, string $divider = '-'): string
+function slugify(string $text, string $divider = '-'): string
 {
     // replace non letter or digits by divider
     $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
@@ -20,7 +20,7 @@ function slugify($text, string $divider = '-'): string
     // lowercase
     $text = strtolower($text);
 
-    if (empty($text)) {
+    if ($text === '') {
         return 'n-a';
     }
 

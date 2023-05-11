@@ -46,21 +46,21 @@ class Route
          * 3+ Args
          *
          */
-        $controllerArg = $url[1] ?? null;
-        $methodArg = $url[2] ?? null;
+        $controllerArg = $url[1] ?? '';
+        $methodArg = $url[2] ?? '';
 
         $numArgs = count($url);
+        $parameterArgs = [];
         for ($i = 3; $i <= $numArgs; $i++) {
             $parameterArgs[] = $url[$i] ?? null;
         }
-
-        $controller = !empty($controllerArg) ?
+        $controller = $controllerArg !== '' ?
             '\Nifty\Controllers\\' . ucfirst($controllerArg) . 'Controller' :
             '\Nifty\Controllers\HomeController';
 
-        $method = !empty($methodArg) ? $methodArg : 'index';
+        $method = $methodArg !== '' ? $methodArg : 'index';
 
-        $params = !empty($parameterArgs) ? $parameterArgs : [];
+        $params = $parameterArgs !== [] ? $parameterArgs : [];
 
         return (object)[
             'controller' => $controller,

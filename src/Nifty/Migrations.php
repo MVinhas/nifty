@@ -32,7 +32,7 @@ class Migrations
 
     public function migrate(array $args = []): void
     {
-        if (empty($args)) {
+        if ($args === []) {
             $this->createTables();
         }
 
