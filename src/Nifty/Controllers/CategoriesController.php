@@ -8,7 +8,6 @@ use Nifty\Utils;
 
 class CategoriesController extends Controller
 {
-    protected Utils $utils;
     protected Site $site;
     protected Category $category;
 
@@ -16,7 +15,6 @@ class CategoriesController extends Controller
     {
         $this->category = new Category();
         $this->site = new Site();
-        $this->utils = new Utils();
     }
 
     public function new(): bool
@@ -53,8 +51,8 @@ class CategoriesController extends Controller
             'id' => $id
         ];
         if (!$this->category->delete(
-            $this->utils->arrayKeysToQueryFields($array),
-            $this->utils->arrayValuesToQueryParams($array)
+            arrayKeysToQueryFields($array),
+            arrayValuesToQueryParams($array)
         )) {
             return false;
         }
@@ -74,15 +72,15 @@ class CategoriesController extends Controller
 
     public function submit(): bool
     {
-        $_post = $this->utils->_postSanitized();
+        $_post = _postSanitized();
         if (!$_post['csrf'] || $_post['csrf'] !== $_SESSION['csrf']) {
             header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
             exit;
         }
         unset($_post['csrf']);
         if (!$this->category->upsert(
-            $this->utils->arrayKeysToQueryFields($_post),
-            $this->utils->arrayValuesToQueryParams($_post)
+            arrayKeysToQueryFields($_post),
+            arrayValuesToQueryParams($_post)
         )) {
             return false;
         }

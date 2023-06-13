@@ -4,7 +4,6 @@ namespace Nifty\Controllers;
 
 use Nifty\Models\Site;
 use Nifty\Route;
-use Nifty\Utils;
 
 class SiteController extends Controller
 {
@@ -42,7 +41,7 @@ class SiteController extends Controller
 
     public function doLogin()
     {
-        $_post = $this->utils->_postSanitized();
+        $_post = _postSanitized();
         if (!$_post['csrf'] || $_post['csrf'] !== $_SESSION['csrf']) {
             header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
             exit;

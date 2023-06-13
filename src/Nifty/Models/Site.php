@@ -60,6 +60,7 @@ class Site extends Model
 
     public function doLogin($post): bool
     {
+
         $exists =
             $this->db->query(
                 "SELECT email, username, password FROM users WHERE email = :email AND status = :status",
@@ -68,7 +69,7 @@ class Site extends Model
                     ':status' => 1
                 ]
             )->fetch();
-        if (isset($exists)) {
+        if (isset($exists) && is_object($exists)) {
             if (password_verify($post['password'], $exists->password)) {
                 unset($exists->password);
                 $_SESSION['user'] = $exists;

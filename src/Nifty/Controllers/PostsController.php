@@ -4,11 +4,9 @@ namespace Nifty\Controllers;
 
 use Nifty\Models\Post;
 use Nifty\Models\Site;
-use Nifty\Utils;
 
 class PostsController extends Controller
 {
-    protected Utils $utils;
     protected Site $site;
     protected Post $post;
 
@@ -16,7 +14,6 @@ class PostsController extends Controller
     {
         $this->post = new Post();
         $this->site = new Site();
-        $this->utils = new Utils();
     }
 
     public function new(): bool
@@ -60,8 +57,8 @@ class PostsController extends Controller
             'id' => $id
         ];
         if (!$this->post->delete(
-            $this->utils->arrayKeysToQueryFields($array),
-            $this->utils->arrayValuesToQueryParams($array)
+            arrayKeysToQueryFields($array),
+            arrayValuesToQueryParams($array)
         )) {
             return false;
         }
@@ -81,15 +78,15 @@ class PostsController extends Controller
 
     public function submit()
     {
-        $_post = $this->utils->_postSanitized();
+        $_post = _postSanitized();
         if (!$_post['csrf'] || $_post['csrf'] !== $_SESSION['csrf']) {
             header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
             exit;
         }
         unset($_post['csrf']);
         if (!$this->post->upsert(
-            $this->utils->arrayKeysToQueryFields($_post),
-            $this->utils->arrayValuesToQueryParams($_post)
+            arrayKeysToQueryFields($_post),
+            arrayValuesToQueryParams($_post)
         )) {
             return false;
         }
