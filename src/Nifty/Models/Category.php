@@ -2,7 +2,7 @@
 
 namespace Nifty\Models;
 
-class Category
+class Category extends Model
 {
     public function __construct()
     {
