@@ -25,7 +25,7 @@ class Migrations
                 'host' => getenv('HOST'),
                 'dbname' => getenv('DBNAME'),
                 'port' => 3306,
-                'charset' => 'utf8mb4'
+                'char' => 'utf8mb4'
             ]
         );
     }
@@ -56,7 +56,7 @@ class Migrations
     private function menu(): void
     {
         $fields = [
-            '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`id` INT(11) UNSIGNED AUTO_INCREMENT',
             '`page_id` INT(11) NULL',
             '`name` VARCHAR(60) NOT NULL',
             '`admin` TINYINT(1) NOT NULL DEFAULT 0',
@@ -68,28 +68,30 @@ class Migrations
             '`disabled` TINYINT(1) NOT NULL DEFAULT 0',
             '`status` TINYINT(1) NOT NULL DEFAULT 1',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
+            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+            'PRIMARY KEY(id)'
         ];
-        $this->db->query("CREATE TABLE menu(" . implode(',', $fields) . ")");
+        $this->db->query("CREATE TABLE IF NOT EXISTS menu(" . implode(',', $fields) . ")");
     }
 
     private function user_roles(): void
     {
         $fields = [
-            '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`id` INT(11) UNSIGNED AUTO_INCREMENT',
             '`name` VARCHAR(60) NOT NULL',
             '`admin` TINYINT(1) NOT NULL DEFAULT 0',
             '`creator` TINYINT(1) NOT NULL DEFAULT 0',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
+            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+            'PRIMARY KEY(id)'
         ];
-        $this->db->query("CREATE TABLE user_roles(" . implode(',', $fields) . ")");
+        $this->db->query("CREATE TABLE IF NOT EXISTS user_roles(" . implode(',', $fields) . ")");
     }
 
     private function users(): void
     {
         $fields = [
-            '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`id` INT(11) UNSIGNED AUTO_INCREMENT',
             '`email` VARCHAR(100) NOT NULL UNIQUE KEY',
             '`username` VARCHAR(30) NOT NULL',
             '`password` VARCHAR(255) NOT NULL',
@@ -97,15 +99,16 @@ class Migrations
             '`registered_at` TIMESTAMP',
             '`status` TINYINT(1) NOT NULL DEFAULT 1',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
+            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+            'PRIMARY KEY(id)'
         ];
-        $this->db->query("CREATE TABLE users(" . implode(',', $fields) . ")");
+        $this->db->query("CREATE TABLE IF NOT EXISTS users(" . implode(',', $fields) . ")");
     }
 
     private function posts(): void
     {
         $fields = [
-            '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`id` INT(11) UNSIGNED AUTO_INCREMENT',
             '`category_id` INT(11) NOT NULL',
             '`author_id` INT(11) NOT NULL',
             '`title` VARCHAR(255) NOT NULL',
@@ -118,37 +121,40 @@ class Migrations
             '`kudos` INT(11) NOT NULL DEFAULT 0',
             '`status` TINYINT(1) NOT NULL DEFAULT 1',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
+            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+            'PRIMARY KEY(id)'
         ];
-        $this->db->query("CREATE TABLE posts(" . implode(',', $fields) . ")");
+        $this->db->query("CREATE TABLE IF NOT EXISTS posts(" . implode(',', $fields) . ")");
     }
 
     private function categories(): void
     {
         $fields = [
-            '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`id` INT(11) UNSIGNED AUTO_INCREMENT',
             '`name` VARCHAR(64) NOT NULL',
             '`status` TINYINT(1) NOT NULL DEFAULT 1',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
+            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+            'PRIMARY KEY(id)'
         ];
-        $this->db->query("CREATE TABLE categories(" . implode(',', $fields) . ")");
+        $this->db->query("CREATE TABLE IF NOT EXISTS categories(" . implode(',', $fields) . ")");
     }
 
     private function page_types(): void
     {
         $fields = [
-            '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`id` INT(11) UNSIGNED AUTO_INCREMENT',
             '`name` VARCHAR(255) NOT NULL',
-            '`code` VARCHAR(255) NOT NULL'
+            '`code` VARCHAR(255) NOT NULL',
+            'PRIMARY KEY(id)'
         ];
-        $this->db->query("CREATE TABLE page_types(" . implode(',', $fields) . ")");
+        $this->db->query("CREATE TABLE IF NOT EXISTS page_types(" . implode(',', $fields) . ")");
     }
 
     private function pages(): void
     {
         $fields = [
-            '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`id` INT(11) UNSIGNED AUTO_INCREMENT',
             '`page_type_id` INT(11) NOT NULL DEFAULT 1',
             '`main_page_id` INT(11) NOT NULL DEFAULT 0',
             '`user_id` INT(11) NULL',
@@ -157,47 +163,51 @@ class Migrations
             '`content` TEXT',
             '`status` TINYINT(1) NOT NULL DEFAULT 1',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
+            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+            'PRIMARY KEY(id)'
         ];
-        $this->db->query("CREATE TABLE pages(" . implode(',', $fields) . ")");
+        $this->db->query("CREATE TABLE IF NOT EXISTS pages(" . implode(',', $fields) . ")");
     }
 
     private function social_networks(): void
     {
         $fields = [
-            '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`id` INT(11) UNSIGNED AUTO_INCREMENT',
             '`name` VARCHAR(64) NOT NULL UNIQUE KEY',
-            '`domain` VARCHAR(255) NOT NULL',
+            '`url` VARCHAR(255) NOT NULL',
             '`logo` VARCHAR(255) NULL',
             '`status` TINYINT(1) NOT NULL DEFAULT 1',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
+            '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+            'PRIMARY KEY(id)'
         ];
-        $this->db->query("CREATE TABLE social_networks(" . implode(',', $fields) . ")");
+        $this->db->query("CREATE TABLE IF NOT EXISTS social_networks(" . implode(',', $fields) . ")");
     }
 
     private function social_accounts(): void
     {
         $fields = [
-            '`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`id` INT(11) UNSIGNED AUTO_INCREMENT',
             '`social_id` INT(11) NOT NULL',
             '`user_id` INT(11) NULL',
             '`username` VARCHAR(255) NOT NULL',
             '`status` TINYINT(1) NOT NULL DEFAULT 1',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-            '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+            '`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
+            'PRIMARY KEY(id)'
         ];
-        $this->db->query("CREATE TABLE social_accounts(" . implode(',', $fields) . ")");
+        $this->db->query("CREATE TABLE IF NOT EXISTS social_accounts(" . implode(',', $fields) . ")");
     }
 
     private function sessions(): void
     {
         $fields = [
-            '`id` BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY',
+            '`id` BIGINT(20) UNSIGNED AUTO_INCREMENT',
             '`session` VARCHAR(32) NOT NULL',
-            '`firstvisit` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP'
+            '`firstvisit` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+            'PRIMARY KEY(id)'
         ];
-        $this->db->query("CREATE TABLE sessions(" . implode(',', $fields) . ")");
+        $this->db->query("CREATE TABLE IF NOT EXISTS sessions(" . implode(',', $fields) . ")");
     }
 
     private function populate_menu(): void
@@ -216,10 +226,10 @@ class Migrations
                 ':logged_in' => $logged_in[$i]
             ];
             $this->db->query(
-                "INSERT INTO menu('name', 'admin', 'creator', 'logged_in')
+                "INSERT INTO menu(`name`, `admin`, `creator`, `logged_in`)
                 VALUES (:name, :admin, :creator, :logged_in) 
-                ON CONFLICT DO UPDATE 
-                SET name = :name, admin = :admin, creator = :creator, logged_in = :logged_in",
+                ON DUPLICATE KEY UPDATE 
+                `name` = :name, `admin` = :admin, `creator` = :creator, `logged_in` = :logged_in",
                 $params
             );
         }
@@ -238,10 +248,10 @@ class Migrations
                 ':creator' => $creator[$i]
             ];
             $this->db->query(
-                "INSERT INTO user_roles('name', 'admin', 'creator')
+                "INSERT INTO user_roles(`name`, `admin`, `creator`)
                 VALUES (:name, :admin, :creator) 
-                ON CONFLICT DO UPDATE 
-                SET name = :name, admin = :admin, creator = :creator",
+                ON DUPLICATE KEY UPDATE 
+                 name = :name, admin = :admin, creator = :creator",
                 $params
             );
         }
@@ -276,10 +286,10 @@ class Migrations
                 ':registered_at' => $registered_at[$i]
             ];
             $this->db->query(
-                "INSERT INTO users('email', 'username', 'password', 'role_id', 'registered_at')
+                "INSERT INTO users(`email`, `username`, `password`, `role_id`, `registered_at`)
                 VALUES (:email, :username, :password, :role_id, :registered_at) 
-                ON CONFLICT DO UPDATE 
-                SET email = :email, username = :username, password = :password, role_id = :role_id, registered_at = :registered_at",
+                ON DUPLICATE KEY UPDATE 
+                 email = :email, username = :username, password = :password, role_id = :role_id, registered_at = :registered_at",
                 $params
             );
         }
@@ -294,10 +304,10 @@ class Migrations
                 ':name' => $name[$i]
             ];
             $this->db->query(
-                "INSERT INTO categories('name')
+                "INSERT INTO categories(`name`)
                 VALUES (:name) 
-                ON CONFLICT DO UPDATE 
-                SET name = :name",
+                ON DUPLICATE KEY UPDATE 
+                 name = :name",
                 $params
             );
         }
@@ -330,10 +340,10 @@ class Migrations
                 ':code' => $code[$i]
             ];
             $this->db->query(
-                "INSERT INTO page_types('name', 'code')
+                "INSERT INTO page_types(`name`, `code`)
                 VALUES (:name, :code) 
-                ON CONFLICT DO UPDATE 
-                SET name = :name, code = :code",
+                ON DUPLICATE KEY UPDATE 
+                 name = :name, code = :code",
                 $params
             );
         }
@@ -357,10 +367,10 @@ class Migrations
                 ':content' => $content[$i]
             ];
             $this->db->query(
-                "INSERT INTO pages('page_type_id', 'user_id', 'title', 'slug', 'content')
+                "INSERT INTO pages(`page_type_id`, `user_id`, `title`, `slug`, `content`)
                 VALUES (:page_type_id, :user_id, :title, :slug, :content) 
-                ON CONFLICT DO UPDATE 
-                SET page_type_id = :page_type_id, user_id = :user_id, title = :title, slug = :slug, content = :content",
+                ON DUPLICATE KEY UPDATE 
+                 page_type_id = :page_type_id, user_id = :user_id, title = :title, slug = :slug, content = :content",
                 $params
             );
         }
@@ -434,10 +444,10 @@ class Migrations
                 ':content' => $content[$i]
             ];
             $this->db->query(
-                "INSERT INTO posts('category_id', 'author_id', 'title', 'slug', 'date', 'excerpt', 'content')
+                "INSERT INTO posts(`category_id`, `author_id`, `title`, `slug`, `date`, `excerpt`, `content`)
                 VALUES (:category_id, :author_id, :title, :slug, :date, :excerpt, :content) 
-                ON CONFLICT DO UPDATE 
-                SET category_id = :category_id, author_id = :author_id, title = :title, slug = :slug, date = :date, excerpt = :excerpt, content = :content",
+                ON DUPLICATE KEY UPDATE 
+                 category_id = :category_id, author_id = :author_id, title = :title, slug = :slug, date = :date, excerpt = :excerpt, content = :content",
                 $params
             );
         }
@@ -475,10 +485,10 @@ class Migrations
                 ':url' => $url[$i]
             ];
             $this->db->query(
-                "INSERT INTO social_networks('name', 'domain')
-                VALUES (:name, :domain) 
-                ON CONFLICT DO UPDATE 
-                SET name = :name, url = :url",
+                "INSERT INTO social_networks(`name`, `url`)
+                VALUES (:name, :url) 
+                ON DUPLICATE KEY UPDATE 
+                 name = :name, url = :url",
                 $params
             );
         }
@@ -497,10 +507,10 @@ class Migrations
                 ':user_id' => $user_id[$i]
             ];
             $this->db->query(
-                "INSERT INTO social_accounts('social_id', 'username', 'user_id')
+                "INSERT INTO social_accounts(`social_id`, `username`, `user_id`)
                 VALUES (:social_id, :username, :user_id) 
-                ON CONFLICT DO UPDATE 
-                SET social_id = :social_id, username = :username, user_id = :user_id",
+                ON DUPLICATE KEY UPDATE 
+                 social_id = :social_id, username = :username, user_id = :user_id",
                 $params
             );
         }

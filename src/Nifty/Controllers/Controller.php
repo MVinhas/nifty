@@ -6,8 +6,8 @@ class Controller
 {
     public function view(object $data = null, $path = null, $file = null): bool
     {
-        $path = $path ?? strtolower($this->path());
-        $file = $file ?? $this->file();
+        $path ??= strtolower($this->path());
+        $file ??= $this->file();
         $file =
             pathinfo($file, PATHINFO_EXTENSION) === 'php'
                 ?

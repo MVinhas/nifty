@@ -2,26 +2,27 @@
 
 namespace Nifty\Controllers;
 
-use Nifty\Models\Category;
+use Nifty\Models\AdminPost;
 use Nifty\Models\Site;
-use Nifty\Utils;
 
-class CategoriesController extends Controller
+class AdminPostsController extends Controller
 {
     protected Site $site;
-    protected Category $category;
+    protected AdminPost $post;
 
     public function __construct()
     {
-        $this->category = new Category();
+        $this->post = new AdminPost();
         $this->site = new Site();
     }
 
     public function new(): bool
     {
         return $this->view(
-            null,
-            'admin/categories',
+            (object)[
+                'categories' => $this->site->getCategories()
+            ],
+            'admin/posts',
             'new'
         );
     }
@@ -29,13 +30,17 @@ class CategoriesController extends Controller
     public function edit(int $id): bool
     {
         if (
-            (!isset($id) || !is_int($id) || $id < 1)
+            (!isset($id) || $id < 1)
         ) {
             return false;
         }
+
         return $this->view(
-            (object)['category' => $this->category->get($id)],
-            'admin/categories',
+            (object)[
+                'post' => $this->post->get($id),
+                'categories' => $this->site->getCategories()
+            ],
+            'admin/posts',
             'edit'
         );
     }
@@ -43,14 +48,15 @@ class CategoriesController extends Controller
     public function delete(int $id): bool
     {
         if (
-            (!isset($id) || !is_int($id) || $id < 1)
+            (!isset($id) || $id < 1)
         ) {
             return false;
         }
+
         $array = [
             'id' => $id
         ];
-        if (!$this->category->delete(
+        if (!$this->post->delete(
             arrayKeysToQueryFields($array),
             arrayValuesToQueryParams($array)
         )) {
@@ -63,14 +69,14 @@ class CategoriesController extends Controller
     {
         return $this->view(
             (object)[
-                'categories' => $this->site->getCategories()
+                'posts' => $this->site->getPosts()
             ],
-            'admin/categories',
+            'admin/posts',
             'index'
         );
     }
 
-    public function submit(): bool
+    public function submit()
     {
         $_post = _postSanitized();
         if (!$_post['csrf'] || $_post['csrf'] !== $_SESSION['csrf']) {
@@ -78,7 +84,7 @@ class CategoriesController extends Controller
             exit;
         }
         unset($_post['csrf']);
-        if (!$this->category->upsert(
+        if (!$this->post->upsert(
             arrayKeysToQueryFields($_post),
             arrayValuesToQueryParams($_post)
         )) {

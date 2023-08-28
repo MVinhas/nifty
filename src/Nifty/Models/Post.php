@@ -4,34 +4,17 @@ namespace Nifty\Models;
 
 class Post extends Model
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    public function delete(string $keys, array $values): bool
-    {
-        if ($this->db->query("DELETE FROM posts WHERE $keys", $values)) {
-            return true;
-        }
-        return false;
-    }
-
-    public function upsert(string $_post_keys, array $_post_values): bool
-    {
-        if ($this->db->query("INSERT INTO posts SET $_post_keys ON DUPLICATE KEY UPDATE $_post_keys", $_post_values)) {
-            return true;
-        }
-        return false;
-    }
-
-    public function get(int $id): object|false
+    public function get(string $slug): object|false
     {
         return $this->db->query(
-            "SELECT * FROM posts WHERE status = :status AND id = :id",
+            "SELECT posts.slug as slug, posts.title as title, posts.date as date, users.username as author, posts.content as content
+            FROM posts
+            LEFT JOIN users
+            ON posts.author_id = users.id
+            WHERE posts.slug = :slug AND posts.status = :status LIMIT 1",
             [
-                ':status' => 1,
-                ':id' => $id
+                ':slug' => $slug,
+                ':status' => 1
             ]
         )->fetch();
     }

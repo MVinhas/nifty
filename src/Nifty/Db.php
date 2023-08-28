@@ -7,6 +7,8 @@ use PDO;
 use PDOException;
 use PDOStatement;
 
+require_once 'utils.php';
+
 class Db
 {
     public PDO $connection;
@@ -51,8 +53,7 @@ class Db
         $msc = round((microtime(true) - $msc) * 1000, 3);
         if (getenv('ENVIRONMENT') === 'dev') {
             log_to_file(
-                "($msc ms)\t$sql\nCaller: " . debug_backtrace()[1]['class'] . "\\" . debug_backtrace(
-                )[1]['function'] . "\n\n",
+                "($msc ms)\t$sql\nCaller: " . debug_backtrace()[1]['class'] . "\\" . debug_backtrace()[1]['function'] . "\n\n",
                 '.querylog'
             );
         }

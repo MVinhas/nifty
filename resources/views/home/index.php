@@ -1,10 +1,11 @@
 <main class="container">
     <div class="p-4 p-md-5 mb-4 rounded text-bg-dark">
         <div class="col-md-6 px-0">
-            <h1 class="display-4 fst-italic"><?= $data->main_post->title ?></h1>
-            <p class="lead my-3"><?= mb_strimwidth($data->main_post->excerpt, 0, 180, '...'); ?></p>
-            <p class="lead mb-0"><a href="/<?= $data->main_post->slug ?>" class="text-white fw-bold">Continue
-                    reading...</a></p>
+            <h1 class="display-4 fst-italic"><?= $data->main_post->title ?? 'There is no main posts' ?></h1>
+            <p class="lead my-3"><?= mb_strimwidth($data->main_post->excerpt ?? 'So there is no excerpt to show', 0, 180, '...'); ?></p>
+            <?php if (isset($data->main_post->slug)) : ?>
+                <p class="lead mb-0"><a href="/post/index/<?= $data->main_post->slug ?>" class="text-white fw-bold">Continue
+                    reading...</a></p><?php endif; ?>
         </div>
     </div>
 
@@ -18,7 +19,7 @@
                         <h3 class="mb-0"><?= $post->title ?></h3>
                         <div class="mb-1 text-muted"><?= $post->date ?></div>
                         <p class="card-text mb-auto"><?= mb_strimwidth($post->excerpt, 0, 90, '...'); ?></p>
-                        <a href="/<?= $post->slug ?>">Continue reading</a>
+                        <a href="/post/index/<?= $post->slug ?>">Continue reading</a>
                     </div>
                     <div class="col-auto d-none d-lg-block p-4">
                         <img src="https://via.placeholder.com/200x250.png"/></text>
@@ -47,7 +48,7 @@
                         <h2 class="blog-post-title mb-1"><?= $post->title ?></h2>
                         <p class="blog-post-meta"><?= $post->date ?> by <a href="#"><?= $post->author ?></a></p>
                         <p class="card-text mb-auto"><?= $post->excerpt; ?></p>
-                        <a href="/<?= $post->slug ?>">Continue reading</a>
+                        <a href="/post/index/<?= $post->slug ?>">Continue reading</a>
                     </article>
                 <?php
                 endforeach; ?>
@@ -99,7 +100,7 @@
             <div class="position-sticky" style="top: 2rem;">
                 <div class="p-4 mb-3 bg-light rounded">
                     <h4 class="fst-italic">About</h4>
-                    <p class="mb-0"><?= $data->about->content ?></p>
+                    <p class="mb-0"><?= $data->about->content ?? 'No "About" content to show' ?></p>
                 </div>
 
                 <div class="p-4">

@@ -2,27 +2,25 @@
 
 namespace Nifty\Controllers;
 
-use Nifty\Models\Post;
+use Nifty\Models\AdminCategory;
 use Nifty\Models\Site;
 
-class PostsController extends Controller
+class AdminCategoriesController extends Controller
 {
     protected Site $site;
-    protected Post $post;
+    protected AdminCategory $category;
 
     public function __construct()
     {
-        $this->post = new Post();
+        $this->category = new AdminCategory();
         $this->site = new Site();
     }
 
     public function new(): bool
     {
         return $this->view(
-            (object)[
-                'categories' => $this->site->getCategories()
-            ],
-            'admin/posts',
+            null,
+            'admin/categories',
             'new'
         );
     }
@@ -30,17 +28,13 @@ class PostsController extends Controller
     public function edit(int $id): bool
     {
         if (
-            (!isset($id) || !is_int($id) || $id < 1)
+            (!isset($id) || $id < 1)
         ) {
             return false;
         }
-
         return $this->view(
-            (object)[
-                'post' => $this->post->get($id),
-                'categories' => $this->site->getCategories()
-            ],
-            'admin/posts',
+            (object)['category' => $this->category->get($id)],
+            'admin/categories',
             'edit'
         );
     }
@@ -52,11 +46,10 @@ class PostsController extends Controller
         ) {
             return false;
         }
-
         $array = [
             'id' => $id
         ];
-        if (!$this->post->delete(
+        if (!$this->category->delete(
             arrayKeysToQueryFields($array),
             arrayValuesToQueryParams($array)
         )) {
@@ -69,14 +62,14 @@ class PostsController extends Controller
     {
         return $this->view(
             (object)[
-                'posts' => $this->site->getPosts()
+                'categories' => $this->site->getCategories()
             ],
-            'admin/posts',
+            'admin/categories',
             'index'
         );
     }
 
-    public function submit()
+    public function submit(): bool
     {
         $_post = _postSanitized();
         if (!$_post['csrf'] || $_post['csrf'] !== $_SESSION['csrf']) {
@@ -84,7 +77,7 @@ class PostsController extends Controller
             exit;
         }
         unset($_post['csrf']);
-        if (!$this->post->upsert(
+        if (!$this->category->upsert(
             arrayKeysToQueryFields($_post),
             arrayValuesToQueryParams($_post)
         )) {
