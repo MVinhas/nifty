@@ -1,8 +1,10 @@
 <?php
 
-namespace Nifty\Models;
+namespace Nifty\Models\backoffice;
 
-class AdminCategory extends Model
+use Nifty\Models\Model;
+
+class Category extends Model
 {
     public function __construct()
     {
@@ -17,7 +19,7 @@ class AdminCategory extends Model
         )->fetch();
     }
 
-    public function delete(array $keys, array $values): bool
+    public function delete(string $keys, array $values): bool
     {
         if ($this->db->query("DELETE FROM categories WHERE $keys", $values)) {
             return true;
@@ -25,7 +27,7 @@ class AdminCategory extends Model
         return false;
     }
 
-    public function upsert(array $_post_keys, array $_post_values): bool
+    public function upsert(string $_post_keys, array $_post_values): bool
     {
         if ($this->db->query(
             "INSERT INTO categories SET $_post_keys ON DUPLICATE KEY UPDATE $_post_keys",

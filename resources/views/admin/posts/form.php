@@ -32,8 +32,8 @@
     <div class="form-group">
         <label for="short_content">Short Content
         </label>
-        <textarea name="excerpt" class="form-control required" rows="2" id="excerpt"
-                  required><?= $data->post->excerpt ?? '' ?>
+        <label for="excerpt">Excerpt</label><textarea name="excerpt" class="form-control required" rows="2" id="excerpt"
+                                                      required><?= $data->post->excerpt ?? '' ?>
           </textarea>
     </div>
     <div class="form-group">
@@ -53,14 +53,14 @@
     <div class="form-group">
 
         <input type="radio" name="featured" value="0" <?php
-        if (!isset($data->post->featured) || $data->post->featured === 0) : ?> checked
+        if (!property_exists($data->post, 'featured') || $data->post->featured === 0) : ?> checked
         <?php
         endif; ?> />
         <label>Regular
         </label>
         <br>
         <input type="radio" name="featured" value="1" <?php
-        if (isset($data->post->featured) && $data->post->featured ?? 0 === 1) : ?> checked
+        if (!property_exists($data->post, 'featured') && $data->post->featured ?? 0 === 1) : ?> checked
         <?php
         endif; ?> />
         <label>Featured

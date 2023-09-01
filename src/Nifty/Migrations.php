@@ -132,6 +132,7 @@ class Migrations
         $fields = [
             '`id` INT(11) UNSIGNED AUTO_INCREMENT',
             '`name` VARCHAR(64) NOT NULL',
+            '`slug` VARCHAR(255) NOT NULL',
             '`status` TINYINT(1) NOT NULL DEFAULT 1',
             '`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
             '`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
@@ -298,16 +299,19 @@ class Migrations
     private function populate_categories(): void
     {
         $name = ['Technology', 'Lifestyle', 'Animals'];
+        $slug = ['technology', 'lifestyle', 'animals'];
         $size = count($name);
         for ($i = 0; $i < $size; $i++) {
             $params = [
-                ':name' => $name[$i]
+                ':name' => $name[$i],
+                ':slug' => $slug[$i]
             ];
             $this->db->query(
-                "INSERT INTO categories(`name`)
-                VALUES (:name) 
+                "INSERT INTO categories(`name`, `slug`)
+                VALUES (:name, :slug) 
                 ON DUPLICATE KEY UPDATE 
-                 name = :name",
+                 name = :name,
+                 slug = :slug",
                 $params
             );
         }
@@ -354,7 +358,7 @@ class Migrations
         $page_type_id = [4, 2, 2, 2];
         $user_id = [1, 1, 1, 1];
         $title = ['About Me', 'Admin', 'Posts', 'Categories'];
-        $slug = ['about-me', 'admin', 'posts', 'categories'];
+        $slug = ['about-me', 'backoffice-admin', 'backoffice-posts', 'backoffice-categories'];
         $content = ["A nice IT guy, that's all", "", "", ""];
 
         $size = count($page_type_id);

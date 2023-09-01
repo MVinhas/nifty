@@ -80,7 +80,7 @@
            aria-label="Search">
     <div class="navbar-nav">
         <div class="nav-item text-nowrap d-flex">
-            <a class="nav-link px-3" href="/admin/signOut">Sign out</a>
+            <a class="nav-link px-3" href="/backoffice/admin/signOut">Sign out</a>
             <a class="nav-link px-3" href="/">Website</a>
         </div>
     </div>

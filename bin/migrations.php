@@ -2,7 +2,7 @@
 
 include_once '../config/env_loader.php';
 $args = [];
-if (isset($argc)) {
+if ($argc > 0) {
     for ($i = 0; $i < $argc; $i++) {
         if ($argv[$i] === '--populate') {
             $args[] = 'populate';

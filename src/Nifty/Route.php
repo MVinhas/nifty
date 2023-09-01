@@ -23,7 +23,14 @@ class Route
             $controller = $uri->controller;
             $method = $uri->method;
             $params = $uri->params;
-            $params ? (new $controller())->{$method}(...$params) : (new $controller())->{$method}();
+            if (method_exists((new $controller()), $method)) {
+                $params ? (new $controller())->{$method}(...$params) : (new $controller())->{$method}();
+            } else {
+                //Since method was not in the URL, then $method must be the parameter (if it exists)
+                $params[] = $method;
+                $method ? (new $controller())->index(...$params) : (new $controller())->index();
+            }
+
         } else {
             (new NiftyNotFoundException())->throw404();
         }
@@ -39,34 +46,42 @@ class Route
         );
 
         /**
-         *
-         * 0 Domain
-         * 1 Controller
-         * 2 Method
-         * 3+ Args
-         *
+         * Some controllers are inside a subfolder
+         * Only one sublevel allowed
          */
+        $this->checkIfIsDir($url);
         $controllerArg = $url[1] ?? '';
         $methodArg = $url[2] ?? '';
 
         $numArgs = count($url);
         $parameterArgs = [];
         for ($i = 3; $i <= $numArgs; $i++) {
-            $parameterArgs[] = $url[$i] ?? null;
+            if (array_key_exists($i, $url)) {
+                $parameterArgs[] = $url[$i];
+            }
         }
         $controller = $controllerArg !== '' ?
-            '\Nifty\Controllers\\' . ucfirst($controllerArg) . 'Controller' :
+            '\Nifty\Controllers\\' . $controllerArg . 'Controller' :
             '\Nifty\Controllers\HomeController';
 
         $method = $methodArg !== '' ? $methodArg : 'index';
-
-        $params = $parameterArgs !== [] ? $parameterArgs : [];
-
         return (object)[
             'controller' => $controller,
             'model' => ucfirst($controllerArg),
             'method' => $method,
-            'params' => $params
+            'params' => $parameterArgs
         ];
+    }
+
+    private function checkIfIsDir(&$url): void
+    {
+        if (is_dir(__DIR__ . '/Controllers/' . $url[1])) {
+            $url = array_combine(range(-1, count($url) - 2), array_values($url));
+            if (array_key_exists(1, $url)) {
+                $url[1] = $url[0] . '\\' . ucfirst($url[1]);
+            }
+        } else {
+            $url[1] = ucfirst($url[1]);
+        }
     }
 }

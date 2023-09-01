@@ -18,12 +18,9 @@ class Site extends Model
         $userAlreadyVisited = $this->db->query(
             "SELECT id FROM sessions where session = :session", [':session' => session_id()]
         )->fetch();
-
-        if (!(array)$userAlreadyVisited) {
-            $this->db->upsert(
-                'sessions',
-                ['session = :session', 'firstvisit = :firstvisit'],
-                ['session' => session_id(), 'firstvisit' => date('Y-m-d H:i:s')]
+        if (!$userAlreadyVisited) {
+            $this->db->query(
+                "INSERT INTO sessions (`session`, `firstvisit`) VALUES (:session, :firstvisit)", [':session' => session_id(), ':firstvisit' => date('Y-m-d H:i:s')]
             );
         }
     }
@@ -69,7 +66,7 @@ class Site extends Model
                     ':status' => 1
                 ]
             )->fetch();
-        if (isset($exists) && is_object($exists)) {
+        if ($exists && is_object($exists)) {
             if (password_verify($post['password'], $exists->password)) {
                 unset($exists->password);
                 $_SESSION['user'] = $exists;

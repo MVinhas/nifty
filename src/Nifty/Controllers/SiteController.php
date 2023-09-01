@@ -21,7 +21,7 @@ class SiteController extends Controller
         return $this->view();
     }
 
-    public function header(): bool
+    public function header(): ?bool
     {
         $data = (object)[];
         $data->menu = $this->site->getMenu();
@@ -29,14 +29,15 @@ class SiteController extends Controller
         if (!$this->site->isAdmin($this->route->getURI()->model)) {
             return $this->view($data);
         }
-        return false;
+        return null;
     }
 
-    public function footer()
+    public function footer(): ?bool
     {
         if (!$this->site->isAdmin($this->route->getURI()->model)) {
             return $this->view();
         }
+        return null;
     }
 
     public function doLogin()
@@ -47,9 +48,7 @@ class SiteController extends Controller
             exit;
         }
         unset($_post['csrf']);
-        if ($this->site->doLogin(
-            $_post
-        )) {
+        if ($this->site->doLogin($_post)) {
             header('Location: /');
             exit;
         } else {
@@ -57,7 +56,7 @@ class SiteController extends Controller
         }
     }
 
-    public function login(bool|null $errors = false): bool
+    public function login(?bool $errors = false): bool
     {
         return $this->view((object)['error' => $errors]);
     }

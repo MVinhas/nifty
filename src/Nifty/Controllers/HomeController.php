@@ -20,12 +20,9 @@ class HomeController extends Controller
             'posts' => (new Site())->getPosts(),
             'main_post' => $this->getMainPost(),
             'other_featured_posts' => $this->getOtherFeaturedPosts(),
-            'normal_posts' => $this->getNormalPosts($this->sanitizePage()),
-            'about' => $this->getAboutContent(),
-            'social_networks' => $this->getSocialNetworks(),
+            'normal_posts' => $this->getNormalPosts($this->getPage()),
             'previous_page' => $this->getPreviousPage(),
-            'next_page' => $this->getNextPage(),
-            'archive' => $this->getArchive()
+            'next_page' => $this->getNextPage()
         ];
         $data->last_key = (string)array_key_last((array)$data->posts);
 
@@ -47,9 +44,9 @@ class HomeController extends Controller
         return $this->home->getNormalPosts($page_offset);
     }
 
-    public function sanitizePage(): int
+    public function getPage(): int
     {
-        if (!isset($_GET['page'])) {
+        if (!array_key_exists('page', $_GET)) {
             return 0;
         }
         return (int)$_GET['page'];
@@ -67,12 +64,12 @@ class HomeController extends Controller
 
     public function getPreviousPage(): int
     {
-        return $this->sanitizePage() - 1;
+        return $this->getPage() - 1;
     }
 
     public function getNextPage(): int
     {
-        return $this->sanitizePage() + 1;
+        return $this->getPage() + 1;
     }
 
     public function getArchive(): bool|array

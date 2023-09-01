@@ -19,16 +19,10 @@
                     </svg>
                 </a>
                 <?php
-                if (
-                    isset($_SESSION)
-                    &&
-                    isset($_SESSION['user']->username)
-                    &&
-                    is_string($_SESSION['user']->username)
-                ) : ?>
+                if ($_SESSION !== null && array_key_exists('user', $_SESSION) && is_string($_SESSION['user']->username)) : ?>
                     <span class="d-block">Welcome, <?= $_SESSION['user']->username; ?></span>
                     &nbsp;
-                    <a href="/admin" role="button">Admin</a>
+                    <a href="/backoffice/admin" role="button">Admin</a>
                 <?php
                 else : ?>
                     <a class="btn btn-sm btn-outline-secondary " href="/site/login">Sign up</a>
@@ -42,7 +36,7 @@
         <nav class="nav d-flex justify-content-between">
             <?php
             foreach ($data->categories as $category) : ?>
-                <a class="p-2 link-secondary" href="<?= $category->slug ?>"><?= $category->name ?></a>
+                <a class="p-2 link-secondary" href="/category/<?= $category->slug ?>"><?= $category->name ?></a>
             <?php
             endforeach; ?>
         </nav>

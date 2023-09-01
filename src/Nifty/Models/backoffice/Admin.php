@@ -1,6 +1,8 @@
 <?php
 
-namespace Nifty\Models;
+namespace Nifty\Models\backoffice;
+
+use Nifty\Models\Model;
 
 class Admin extends Model
 {

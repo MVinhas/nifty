@@ -1,8 +1,9 @@
 <?php
 
-namespace Nifty\Controllers;
+namespace Nifty\Controllers\backoffice;
 
-use Nifty\Models\Admin;
+use Nifty\Controllers\Controller;
+use Nifty\Models\backoffice\Admin;
 use Nifty\Models\Site;
 
 class AdminController extends Controller

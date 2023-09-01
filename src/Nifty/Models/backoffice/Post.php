@@ -1,8 +1,10 @@
 <?php
 
-namespace Nifty\Models;
+namespace Nifty\Models\backoffice;
 
-class AdminPost extends Model
+use Nifty\Models\Model;
+
+class Post extends Model
 {
     public function __construct()
     {

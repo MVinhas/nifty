@@ -2,6 +2,10 @@
 
 function slugify(string $text, string $divider = '-'): string
 {
+    if ($text === '') {
+        return 'n-' . time() + rand(0, 1000) . '-a';
+    }
+
     // replace non letter or digits by divider
     $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
 
@@ -18,13 +22,7 @@ function slugify(string $text, string $divider = '-'): string
     $text = preg_replace('~-+~', $divider, $text);
 
     // lowercase
-    $text = strtolower($text);
-
-    if ($text === '') {
-        return 'n-a';
-    }
-
-    return $text;
+    return strtolower($text);
 }
 
 function arrayKeysToQueryFields(array|null $array): string
@@ -80,9 +78,9 @@ function log_header(): void
 
 function d(mixed $data): void
 {
-    echo "<pre>";
+    echo "<pre><code>";
     echo var_dump($data);
-    echo "</pre>";
+    echo "</code></pre>";
 }
 
 function dd(mixed $data, bool $return = false)
