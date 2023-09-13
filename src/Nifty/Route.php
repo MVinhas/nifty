@@ -12,7 +12,7 @@ class Route
         $site = new SiteController();
         $site->head();
         $site->header();
-        (new Route())->contentToRender();
+        $this->contentToRender();
         $site->footer();
     }
 

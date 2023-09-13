@@ -50,11 +50,8 @@ function _postSanitized(): array
 
 function log_to_file(string $what, string $file): bool
 {
-    $fileFullPath = $_SERVER['DOCUMENT_ROOT'] . '/../logs/' . $file;
-    if (str_starts_with(php_sapi_name(), 'cli')) {
-        $fileFullPath = '../logs/' . $file;
-    }
-
+   
+    $fileFullPath = '/tmp/'.$file;
     if (valid_file($fileFullPath) && getenv('ENVIRONMENT') === 'dev') {
         return error_log($what, 3, $fileFullPath);
     }
@@ -63,16 +60,10 @@ function log_to_file(string $what, string $file): bool
 
 function log_header(): void
 {
-    $path = $_SERVER['DOCUMENT_ROOT'] . '../logs/';
-    if (str_starts_with(php_sapi_name(), 'cli')) {
-        $path = '../logs/';
-    }
-    if (!is_dir($path)) {
-        mkdir($path);
-    }
+    $path = '/tmp/';
     $files = array_filter(scandir($path), fn($item) => !is_dir($path . $item));
     foreach ($files as $file) {
-        file_put_contents($path . $file, "===" . date('Y-m-d H:i:s') . "===\n", FILE_APPEND);
+        @file_put_contents($path . $file, "===" . date('Y-m-d H:i:s') . "===\n", FILE_APPEND);
     }
 }
 
