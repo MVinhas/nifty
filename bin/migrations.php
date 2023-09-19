@@ -1,6 +1,6 @@
 <?php
 
-include_once '../config/env_loader.php';
+include_once __DIR__.'/../config/env_loader.php';
 $args = [];
 if ($argc > 0) {
     for ($i = 0; $i < $argc; $i++) {
